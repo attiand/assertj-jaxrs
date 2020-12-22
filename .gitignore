@@ -1,0 +1,17 @@
+.repository/
+?/
+*.unloaded/**
+
+*.versionsBackup
+# Maven
+**/target/*
+
+# Eclipse
+**/.project
+**/.classpath
+**/.settings/
+**/.metadata
+
+sites/*/server.json
+sites/*/hubble.json
+*.log
