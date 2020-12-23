@@ -29,7 +29,7 @@ public class JsonValueAssert extends AbstractAssert<JsonValueAssert, JsonValue> 
 			failWithMessage("Expected json value to have type STRING but was <%s>", actual.getValueType());
 		}
 
-		JsonString value = (JsonString) actual;
+		var value = (JsonString) actual;
 
 		return new StringAssert(value.getString());
 	}
@@ -41,7 +41,7 @@ public class JsonValueAssert extends AbstractAssert<JsonValueAssert, JsonValue> 
 			failWithMessage("Expected json value to have type NUMBER but was <%s>", actual.getValueType());
 		}
 
-		JsonNumber value = (JsonNumber) actual;
+		var value = (JsonNumber) actual;
 
 		return new IntegerAssert(value.intValue());
 	}
@@ -53,7 +53,7 @@ public class JsonValueAssert extends AbstractAssert<JsonValueAssert, JsonValue> 
 			failWithMessage("Expected json value to have type NUMBER but was <%s>", actual.getValueType());
 		}
 
-		JsonNumber value = (JsonNumber) actual;
+		var value = (JsonNumber) actual;
 
 		return new DoubleAssert(value.doubleValue());
 	}

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
 import org.mockserver.junit.jupiter.MockServerSettings;
+import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
 @ExtendWith(MockServerExtension.class)
@@ -21,7 +22,8 @@ import org.mockserver.model.HttpResponse;
 class StatusCodeIT {
 
 	StatusCodeIT(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource")).respond(HttpResponse.response().withStatusCode(200));
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response().withStatusCode(200));
 	}
 
 	@Test

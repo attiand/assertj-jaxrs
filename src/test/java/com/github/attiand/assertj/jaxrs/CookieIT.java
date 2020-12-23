@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
 import org.mockserver.junit.jupiter.MockServerSettings;
+import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
 import com.github.attiand.assertj.jaxrs.asserts.CookiesAssert;
@@ -23,7 +24,7 @@ class CookieIT {
 
 	@Test
 	void shouldAssertCookieName(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withCookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW"));
 
 		try (Response response = target.path("/resource").request().get()) {
@@ -33,7 +34,7 @@ class CookieIT {
 
 	@Test
 	void shouldAssertCookieSatisfies(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withCookie(new org.mockserver.model.Cookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW")));

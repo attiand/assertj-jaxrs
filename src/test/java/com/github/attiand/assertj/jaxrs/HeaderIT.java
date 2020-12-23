@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
 import org.mockserver.junit.jupiter.MockServerSettings;
+import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.mockserver.model.HttpResponse;
 
@@ -27,7 +28,7 @@ class HeaderIT {
 
 	@Test
 	void shouldAssertHeaderName(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)));
 
 		try (Response response = target.path("/resource").request().get()) {
@@ -37,7 +38,7 @@ class HeaderIT {
 
 	@Test
 	void shouldAssertHeaderSatisfies(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)));
 
 		try (Response response = target.path("/resource").request().get()) {
@@ -49,7 +50,7 @@ class HeaderIT {
 
 	@Test
 	void shouldAssertMediaTypeHeader(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withContentType(org.mockserver.model.MediaType.APPLICATION_JSON_UTF_8));

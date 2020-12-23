@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.junit.jupiter.MockServerExtension;
 import org.mockserver.junit.jupiter.MockServerSettings;
+import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.mockserver.model.HttpResponse;
 
@@ -27,7 +28,7 @@ class BodyIT {
 
 	@Test
 	void shouldAssertBodyExists(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN))
@@ -40,7 +41,8 @@ class BodyIT {
 
 	@Test
 	void shouldAssertBodyDoesNotExists(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource")).respond(HttpResponse.response().withStatusCode(200));
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response().withStatusCode(200));
 
 		try (Response response = target.path("/resource").request().get()) {
 			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasNoEntity();
@@ -49,7 +51,7 @@ class BodyIT {
 
 	@Test
 	void shouldAssertTextBody(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN))
@@ -62,7 +64,7 @@ class BodyIT {
 
 	@Test
 	void shouldAssertJsonPointerBody(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -78,7 +80,7 @@ class BodyIT {
 
 	@Test
 	void shouldAssertTypeBody(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"))
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
