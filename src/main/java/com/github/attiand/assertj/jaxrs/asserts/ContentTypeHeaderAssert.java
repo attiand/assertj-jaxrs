@@ -11,12 +11,16 @@ public class ContentTypeHeaderAssert extends AbstractAssert<ContentTypeHeaderAss
 		super(actual, ContentTypeHeaderAssert.class);
 	}
 
-	public static ContentTypeHeaderAssert assertThat(Object contentType) {
-		if (!(contentType instanceof String)) {
+	public static ContentTypeHeaderAssert assertThat(MediaType mediaType) {
+		return new ContentTypeHeaderAssert(mediaType);
+	}
+
+	public static ContentTypeHeaderAssert assertThat(Object mediaType) {
+		if (!(mediaType instanceof String)) {
 			throw new AssertionError("Content type value is not a string");
 		}
 
-		String contentTypeValue = (String) contentType;
+		String contentTypeValue = (String) mediaType;
 
 		try {
 			return new ContentTypeHeaderAssert(MediaType.valueOf(contentTypeValue));
@@ -28,7 +32,7 @@ public class ContentTypeHeaderAssert extends AbstractAssert<ContentTypeHeaderAss
 	public ContentTypeHeaderAssert hasType(String type) {
 		isNotNull();
 
-		if (!actual.getType().equals(type)) {
+		if (!type.equals(actual.getType())) {
 			failWithMessage("Expecting content type <%s> to be equals to <%s>", actual.getType(), type);
 		}
 
@@ -38,7 +42,7 @@ public class ContentTypeHeaderAssert extends AbstractAssert<ContentTypeHeaderAss
 	public ContentTypeHeaderAssert hasSubType(String subType) {
 		isNotNull();
 
-		if (!actual.getSubtype().equals(subType)) {
+		if (!subType.equals(actual.getSubtype())) {
 			failWithMessage("Expecting content sub type <%s> to be equals to <%s>", actual.getType(), subType);
 		}
 

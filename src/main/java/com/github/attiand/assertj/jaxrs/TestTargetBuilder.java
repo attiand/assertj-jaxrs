@@ -6,7 +6,7 @@ import javax.ws.rs.client.WebTarget;
 
 public class TestTargetBuilder {
 
-	private String baseUri = "http://localhost:8080";
+	private String baseUri = "http://localhost:8081";
 
 	public static TestTargetBuilder newBuilder() {
 		return new TestTargetBuilder();

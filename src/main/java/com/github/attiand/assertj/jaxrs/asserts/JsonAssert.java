@@ -9,5 +9,4 @@ public class JsonAssert extends AbstractAssert<JsonAssert, JsonObject> {
 	public JsonAssert(JsonObject actual) {
 		super(actual, JsonAssert.class);
 	}
-
 }

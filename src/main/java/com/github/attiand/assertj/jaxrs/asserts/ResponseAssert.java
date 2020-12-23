@@ -1,11 +1,17 @@
 package com.github.attiand.assertj.jaxrs.asserts;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonReaderFactory;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
@@ -15,6 +21,8 @@ import org.assertj.core.api.ObjectAssert;
 import org.assertj.core.api.StringAssert;
 
 public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
+
+	private JsonReaderFactory jsonFactory = Json.createReaderFactory(Collections.emptyMap());
 
 	public ResponseAssert(Response actual) {
 		super(actual, ResponseAssert.class);
@@ -59,16 +67,19 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 	}
 
 	public JsonAssert entityAsJson() {
-		InputStream is = actual.readEntity(InputStream.class);
-		JsonObject jsonObject = Json.createReader(is).readObject();
-		return new JsonAssert(jsonObject);
+		try (InputStream is = actual.readEntity(InputStream.class); JsonReader reader = jsonFactory.createReader(is)) {
+			JsonObject jsonObject = reader.readObject();
+			return new JsonAssert(jsonObject);
+		} catch (IOException e) {
+			throw new IllegalArgumentException("Could not close entity", e);
+		}
 	}
 
 	public <U> ObjectAssert<U> entityAs(Class<U> clazz) {
-		return new ObjectAssert<U>(actual.readEntity(clazz));
+		return new ObjectAssert<>(actual.readEntity(clazz));
 	}
 
-	public ResponseAssert containsHeader(String headerName) {
+	public ResponseAssert containHeader(String headerName) {
 		isNotNull();
 
 		if (actual.getHeaderString(headerName) == null) {
@@ -82,6 +93,24 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 		isNotNull();
 
 		requirements.accept(actual.getHeaders());
+
+		return this;
+	}
+
+	public ResponseAssert containCookie(String cookie) {
+		isNotNull();
+
+		if (!actual.getCookies().containsKey(cookie)) {
+			failWithMessage("Expected cookies <%s> to contain cookie <%s>", actual.getCookies(), cookie);
+		}
+
+		return this;
+	}
+
+	public ResponseAssert cookiesSatisfies(Consumer<Map<String, NewCookie>> requirements) {
+		isNotNull();
+
+		requirements.accept(actual.getCookies());
 
 		return this;
 	}
