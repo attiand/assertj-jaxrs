@@ -3,6 +3,7 @@ package com.github.attiand.assertj.jaxrs.asserts;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -10,6 +11,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonReaderFactory;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -79,25 +81,7 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 		return new ObjectAssert<>(actual.readEntity(clazz));
 	}
 
-	public ResponseAssert containHeader(String headerName) {
-		isNotNull();
-
-		if (actual.getHeaderString(headerName) == null) {
-			failWithMessage("Expected header <%s> to contain header <%s>", actual.getHeaders(), headerName);
-		}
-
-		return this;
-	}
-
-	public ResponseAssert headersSatisfies(Consumer<MultivaluedMap<String, Object>> requirements) {
-		isNotNull();
-
-		requirements.accept(actual.getHeaders());
-
-		return this;
-	}
-
-	public ResponseAssert containCookie(String cookie) {
+	public ResponseAssert hasCookie(String cookie) {
 		isNotNull();
 
 		if (!actual.getCookies().containsKey(cookie)) {
@@ -130,6 +114,122 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 
 		if (actual.hasEntity()) {
 			failWithMessage("Expected message to contain no entity but did");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert containHeader(String headerName) {
+		isNotNull();
+
+		if (actual.getHeaderString(headerName) == null) {
+			failWithMessage("Expected header <%s> to contain header <%s>", actual.getHeaders(), headerName);
+		}
+
+		return this;
+	}
+
+	public ResponseAssert headersSatisfies(Consumer<MultivaluedMap<String, Object>> requirements) {
+		isNotNull();
+
+		requirements.accept(actual.getHeaders());
+
+		return this;
+	}
+
+	public ResponseAssert hasMediaType() {
+		isNotNull();
+
+		if (actual.getMediaType() == null) {
+			failWithMessage("Expected message to have media type but did not");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasNoMediaType() {
+		isNotNull();
+
+		if (actual.getMediaType() != null) {
+			failWithMessage("Expected message to have no media type but did");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasMediaType(MediaType mediaType) {
+		isNotNull();
+
+		if (!mediaType.equals(actual.getMediaType())) {
+			failWithMessage("Expected media type to be <%s> but was <%s>", mediaType, actual.getMediaType());
+		}
+
+		return this;
+	}
+
+	public ResponseAssert mediaTypeSatisfies(Consumer<MediaType> requirements) {
+		isNotNull();
+
+		requirements.accept(actual.getMediaType());
+
+		return this;
+	}
+
+	public ResponseAssert hasDate() {
+		isNotNull();
+
+		if (actual.getDate() == null) {
+			failWithMessage("Expected message to have a date but did not");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasNoDate() {
+		isNotNull();
+
+		if (actual.getDate() != null) {
+			failWithMessage("Expected message to have no date but did");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasDate(Date date) {
+		isNotNull();
+
+		if (!date.equals(actual.getDate())) {
+			failWithMessage("Expected date to be <%s> but was <%s>", date, actual.getDate());
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasLastModifiedDate() {
+		isNotNull();
+
+		if (actual.getLastModified() == null) {
+			failWithMessage("Expected message to have last modified date but did not");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasNoLastModifiedDate() {
+		isNotNull();
+
+		if (actual.getLastModified() != null) {
+			failWithMessage("Expected message to have no last modified date but did");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasLastModifiedDate(Date date) {
+		isNotNull();
+
+		if (!date.equals(actual.getLastModified())) {
+			failWithMessage("Expected last modified date to be <%s> but was <%s>", date, actual.getLastModified());
 		}
 
 		return this;

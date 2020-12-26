@@ -4,7 +4,6 @@ import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -17,7 +16,6 @@ import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.mockserver.model.HttpResponse;
 
-import com.github.attiand.assertj.jaxrs.asserts.ContentTypeHeaderAssert;
 import com.github.attiand.assertj.jaxrs.asserts.HeadersAssert;
 import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 
@@ -28,45 +26,36 @@ class HeaderIT {
 	WebTarget target = TestTargetBuilder.newBuilder().build();
 
 	@Test
-	void shouldAssertHeaderName(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
-				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)));
+	void shouldAcceptExsistingHeader(ClientAndServer client) {
+		client.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
-		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).containHeader(HttpHeaders.ACCEPT).hasNoEntity();
+		try (Response response = target.path("/resource").request().options()) {
+			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).containHeader(HttpHeaders.ALLOW).hasNoEntity();
 		}
 	}
 
 	@Test
-	void shouldAssertHeaderSatisfies(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
-				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ACCEPT, MediaType.TEXT_HTML)));
+	void shouldAcceptSatisfiedHeader(ClientAndServer client) {
+		client.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
-		try (Response response = target.path("/resource").request().get()) {
+		try (Response response = target.path("/resource").request().options()) {
 			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
-				HeadersAssert.assertThat(h).extractHeader(HttpHeaders.ACCEPT).singleElement().isEqualTo(MediaType.TEXT_HTML);
+				HeadersAssert.assertThat(h).extractHeader(HttpHeaders.ALLOW).singleElement().isEqualTo("GET");
 			}).hasNoEntity();
 		}
 	}
 
 	@Test
-	void shouldAssertMediaTypeHeader(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
-				.respond(HttpResponse.response()
-						.withStatusCode(200)
-						.withContentType(org.mockserver.model.MediaType.APPLICATION_JSON_UTF_8));
+	void shouldAcceptSatisfiedHeaderMultipleValues(ClientAndServer client) {
+		client.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET", "PUT")));
 
-		try (Response response = target.path("/resource").request().get()) {
+		try (Response response = target.path("/resource").request().options()) {
 			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
-				HeadersAssert.assertThat(h).extractHeader(HttpHeaders.CONTENT_TYPE).singleElement().satisfies(ct -> {
-					ContentTypeHeaderAssert.assertThat(ct)
-							.hasType("application")
-							.hasSubType("json")
-							.parameters()
-							.extractingByKey(MediaType.CHARSET_PARAMETER)
-							.isEqualTo("utf-8");
-				});
-			}).hasEntity();
+				HeadersAssert.assertThat(h).extractHeader(HttpHeaders.ALLOW).containsExactlyInAnyOrder("GET", "PUT");
+			}).hasNoEntity();
 		}
 	}
 }

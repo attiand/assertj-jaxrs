@@ -22,12 +22,12 @@ import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
-class BodyIT {
+class EntityIT {
 
 	WebTarget target = TestTargetBuilder.newBuilder().build();
 
 	@Test
-	void shouldAssertBodyExists(ClientAndServer client) {
+	void shouldAcceptExistingEntity(ClientAndServer client) {
 		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
@@ -40,7 +40,7 @@ class BodyIT {
 	}
 
 	@Test
-	void shouldAssertBodyDoesNotExists(ClientAndServer client) {
+	void shouldAcceptNonExistingEntity(ClientAndServer client) {
 		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 
@@ -50,7 +50,7 @@ class BodyIT {
 	}
 
 	@Test
-	void shouldAssertTextBody(ClientAndServer client) {
+	void shouldAcceptExistingTextEntity(ClientAndServer client) {
 		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
@@ -63,7 +63,7 @@ class BodyIT {
 	}
 
 	@Test
-	void shouldAssertTypeBody(ClientAndServer client) {
+	void shouldAcceptSatisfiedTextEntity(ClientAndServer client) {
 		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)

@@ -28,21 +28,21 @@ class StatusCodeIT {
 	}
 
 	@Test
-	void shouldAssertStatusCodeAsInteger() {
+	void shouldAcceptStatusCodeAsInteger() {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCode(200);
 		}
 	}
 
 	@Test
-	void shouldAssertStatusCodeConstant() {
+	void shouldAcceptStatusCodeConstant() {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCode(Status.OK);
 		}
 	}
 
 	@Test
-	void shouldAssertStatusCodeFamily() {
+	void shouldAcceptStatusCodeFamily() {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCodeFamily(SUCCESSFUL);
 		}
