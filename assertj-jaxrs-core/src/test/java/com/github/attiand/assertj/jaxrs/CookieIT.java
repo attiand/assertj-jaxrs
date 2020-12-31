@@ -16,16 +16,16 @@ import org.mockserver.model.HttpResponse;
 
 import com.github.attiand.assertj.jaxrs.asserts.CookiesAssert;
 import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
+import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
+@ExtendWith(AssertjJaxrsExtension.class)
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
 class CookieIT {
 
-	WebTarget target = TestTargetBuilder.newBuilder().build();
-
 	@Test
-	void shouldAcceptExistingCookie(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptExistingCookie(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withCookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW"));
 
 		try (Response response = target.path("/resource").request().get()) {
@@ -34,8 +34,8 @@ class CookieIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedCookie(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptSatisfiedCookie(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withCookie(new org.mockserver.model.Cookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW")));

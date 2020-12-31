@@ -17,16 +17,16 @@ import org.mockserver.model.HttpResponse;
 
 import com.github.attiand.assertj.jaxrs.asserts.MediaTypeAssert;
 import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
+import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
+@ExtendWith(AssertjJaxrsExtension.class)
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
 class MediaTypeIT {
 
-	WebTarget target = TestTargetBuilder.newBuilder().build();
-
 	@Test
-	void shouldAcceptExistingtMediaType(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptExistingtMediaType(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withContentType(org.mockserver.model.MediaType.APPLICATION_JSON));
 
 		try (Response response = target.path("/resource").request().get()) {
@@ -35,8 +35,8 @@ class MediaTypeIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedMediaType(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptSatisfiedMediaType(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
 						.withContentType(org.mockserver.model.MediaType.APPLICATION_JSON_UTF_8));

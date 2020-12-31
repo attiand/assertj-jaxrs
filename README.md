@@ -19,9 +19,9 @@ try (Response response = target.path("/resource").request().get()) {
    assertThat(response)
       .hasStatusCode(Status.OK)
       .entityAs(ExampleRepresentation.class)
-      .satisfies(r -> {
-         assertThat(r.getName()).isEqualTo("name");
-         assertThat(r.getValue()).isEqualTo(10);
+      .satisfies(e -> {
+         assertThat(e.getName()).isEqualTo("name");
+         assertThat(e.getValue()).isEqualTo(10);
       });
    }
 }
@@ -51,9 +51,9 @@ try (Response response = target.path("/resource").request().get()) {
    ResponseAssert.assertThat(response)
       .hasStatusCode(Status.OK)
       .entityAsJson()
-      .satisfies(o -> {
-         JsonObjectAssert.assertThat(o).path("/name").asString().isEqualTo("name");
-         JsonObjectAssert.assertThat(o).path("/value").asInteger().isEqualTo(10);
+      .satisfies(e -> {
+         JsonObjectAssert.assertThat(e).path("/name").asString().isEqualTo("name");
+         JsonObjectAssert.assertThat(e).path("/value").asInteger().isEqualTo(10);
     });
 }
 ```
@@ -100,16 +100,23 @@ Add the following dependency:
 ```
 ## Quarkus
 
-Note that the `@QuarkusTest` extension does not work well with a `WebTarget` parameter resolver. You can run Quarkus tests like this.
+Note that the `@QuarkusTest` extension does not work well with a `WebTarget` parameter resolver. You can however run Quarkus tests like this.
 ```java
 @QuarkusTest
 class GreetingResourceTest {
    @TestHTTPResource
    String uri;
-    
+
+	private static final Client client = ClientBuilder.newClient();
+
+	@AfterAll
+	static void afterAll() {
+		client.close();
+	}
+
    @Test
    void testHelloEndpointJaxrs() {
-      WebTarget target = TestTargetBuilder.newBuilder().baseURI(uri).build();
+      WebTarget target = client.target(uri);
 
       try (Response response = target.path("/hello-resteasy").request().get()) {
          assertThat(response)

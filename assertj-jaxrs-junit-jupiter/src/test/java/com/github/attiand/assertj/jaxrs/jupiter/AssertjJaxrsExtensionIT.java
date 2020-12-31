@@ -15,8 +15,8 @@ import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
 @ExtendWith(MockServerExtension.class)
-@ExtendWith(AssertjJaxrsExtension.class)
 @MockServerSettings(ports = { 8088 })
+@ExtendWith(AssertjJaxrsExtension.class)
 @AssertjJaxrsSettings(baseUri = "http://localhost:8088")
 class AssertjJaxrsExtensionIT {
 

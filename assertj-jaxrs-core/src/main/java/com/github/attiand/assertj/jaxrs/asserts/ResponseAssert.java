@@ -119,7 +119,7 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 		return this;
 	}
 
-	public ResponseAssert containHeader(String headerName) {
+	public ResponseAssert hasHeader(String headerName) {
 		isNotNull();
 
 		if (actual.getHeaderString(headerName) == null) {

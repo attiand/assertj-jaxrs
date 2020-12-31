@@ -15,16 +15,16 @@ import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
 import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
+import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
+@ExtendWith(AssertjJaxrsExtension.class)
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
 class DateIT {
 
-	WebTarget target = TestTargetBuilder.newBuilder().build();
-
 	@Test
-	void shouldAcceptNonExistingDate(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptNonExistingDate(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 
 		try (Response response = target.path("/resource").request().get()) {
@@ -33,8 +33,8 @@ class DateIT {
 	}
 
 	@Test
-	void shouldAcceptNonExistingLastModifiedDate(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptNonExistingLastModifiedDate(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 
 		try (Response response = target.path("/resource").request().get()) {

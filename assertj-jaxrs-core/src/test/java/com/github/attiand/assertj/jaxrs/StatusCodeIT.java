@@ -16,11 +16,12 @@ import org.mockserver.junit.jupiter.MockServerSettings;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
+import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
+
+@ExtendWith(AssertjJaxrsExtension.class)
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
 class StatusCodeIT {
-
-	WebTarget target = TestTargetBuilder.newBuilder().build();
 
 	StatusCodeIT(ClientAndServer client) {
 		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
@@ -28,21 +29,21 @@ class StatusCodeIT {
 	}
 
 	@Test
-	void shouldAcceptStatusCodeAsInteger() {
+	void shouldAcceptStatusCodeAsInteger(WebTarget target) {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCode(200);
 		}
 	}
 
 	@Test
-	void shouldAcceptStatusCodeConstant() {
+	void shouldAcceptStatusCodeConstant(WebTarget target) {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCode(Status.OK);
 		}
 	}
 
 	@Test
-	void shouldAcceptStatusCodeFamily() {
+	void shouldAcceptStatusCodeFamily(WebTarget target) {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCodeFamily(SUCCESSFUL);
 		}

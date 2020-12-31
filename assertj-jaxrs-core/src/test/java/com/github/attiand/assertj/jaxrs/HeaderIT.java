@@ -18,26 +18,26 @@ import org.mockserver.model.HttpResponse;
 
 import com.github.attiand.assertj.jaxrs.asserts.HeadersAssert;
 import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
+import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
+@ExtendWith(AssertjJaxrsExtension.class)
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
 class HeaderIT {
 
-	WebTarget target = TestTargetBuilder.newBuilder().build();
-
 	@Test
-	void shouldAcceptExsistingHeader(ClientAndServer client) {
-		client.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptExsistingHeader(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
 		try (Response response = target.path("/resource").request().options()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).containHeader(HttpHeaders.ALLOW).hasNoEntity();
+			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasHeader(HttpHeaders.ALLOW).hasNoEntity();
 		}
 	}
 
 	@Test
-	void shouldAcceptSatisfiedHeader(ClientAndServer client) {
-		client.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptSatisfiedHeader(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
 		try (Response response = target.path("/resource").request().options()) {
@@ -48,8 +48,8 @@ class HeaderIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedHeaderMultipleValues(ClientAndServer client) {
-		client.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
+	void shouldAcceptSatisfiedHeaderMultipleValues(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET", "PUT")));
 
 		try (Response response = target.path("/resource").request().options()) {
