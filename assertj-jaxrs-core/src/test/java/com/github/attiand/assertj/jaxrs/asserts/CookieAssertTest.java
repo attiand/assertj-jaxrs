@@ -1,5 +1,6 @@
 package com.github.attiand.assertj.jaxrs.asserts;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import javax.ws.rs.core.NewCookie;
@@ -12,8 +13,7 @@ class CookieAssertTest {
 	void shouldAcceptValues() {
 		NewCookie cookie = new NewCookie("mycookie", "cookievalue", "cookiepath", "cookiedomain", "cookiecomment", 10, true, true);
 
-		CookieAssert.assertThat(cookie)
-				.hasName("mycookie")
+		assertThat(cookie).hasName("mycookie")
 				.hasValue("cookievalue")
 				.hasPath("cookiepath")
 				.hasDomain("cookiedomain")
@@ -26,8 +26,7 @@ class CookieAssertTest {
 	void shouldAcceptDefaultValues() {
 		NewCookie cookie = new NewCookie("mycookie", "cookievalue");
 
-		CookieAssert.assertThat(cookie)
-				.hasName("mycookie")
+		assertThat(cookie).hasName("mycookie")
 				.hasValue("cookievalue")
 				.hasNoPath()
 				.hasNoDomain()
@@ -40,7 +39,7 @@ class CookieAssertTest {
 	void shouldAssertIncorrectValue() {
 		NewCookie cookie = new NewCookie("mycookie", "cookievalue");
 
-		CookieAssert cut = CookieAssert.assertThat(cookie);
+		CookieAssert cut = assertThat(cookie);
 
 		assertThatThrownBy(() -> {
 			cut.hasValue("faultyvalue");

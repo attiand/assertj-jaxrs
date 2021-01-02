@@ -1,5 +1,6 @@
 package com.github.attiand.assertj.jaxrs;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
@@ -18,7 +19,6 @@ import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.mockserver.model.HttpResponse;
 
-import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
 @ExtendWith(AssertjJaxrsExtension.class)
@@ -35,7 +35,7 @@ class EntityIT {
 						.withBody("hello"));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasEntity();
 		}
 	}
 
@@ -45,7 +45,7 @@ class EntityIT {
 				.respond(HttpResponse.response().withStatusCode(200));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasNoEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasNoEntity();
 		}
 	}
 
@@ -58,7 +58,7 @@ class EntityIT {
 						.withBody("hello"));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).entityAsText().isEqualTo("hello");
+			assertThat(response).hasStatusCode(Status.OK).entityAsText().isEqualTo("hello");
 		}
 	}
 
@@ -71,10 +71,26 @@ class EntityIT {
 						.withBody("{\"name\":\"myname\",\"value\":10}"));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).entityAs(ExampleRepresentation.class).satisfies(r -> {
-				assertThat(r.getName()).isEqualTo("myname");
-				assertThat(r.getValue()).isEqualTo(10);
-			});
+			assertThat(response).hasStatusCode(Status.OK)
+					.hasMediaType(MediaType.APPLICATION_JSON_TYPE)
+					.entityAs(ExampleRepresentation.class)
+					.satisfies(r -> {
+						assertThat(r.getName()).isEqualTo("myname");
+						assertThat(r.getValue()).isEqualTo(10);
+					});
+		}
+	}
+
+	@Test
+	void shouldAcceptMessageLength(ClientAndServer server, WebTarget target) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response()
+						.withStatusCode(200)
+						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN))
+						.withBody("hello"));
+
+		try (Response response = target.path("/resource").request().get()) {
+			assertThat(response).hasStatusCode(Status.OK).hasValidLength().hasLength(5).hasEntity();
 		}
 	}
 

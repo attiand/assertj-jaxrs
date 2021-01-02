@@ -1,5 +1,6 @@
 package com.github.attiand.assertj.jaxrs;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.WebTarget;
@@ -14,8 +15,6 @@ import org.mockserver.junit.jupiter.MockServerSettings;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
-import com.github.attiand.assertj.jaxrs.asserts.CookiesAssert;
-import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
 @ExtendWith(AssertjJaxrsExtension.class)
@@ -29,7 +28,7 @@ class CookieIT {
 				.respond(HttpResponse.response().withStatusCode(200).withCookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW"));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasCookie("sessionId").hasNoEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasCookie("sessionId").hasNoEntity();
 		}
 	}
 
@@ -41,12 +40,8 @@ class CookieIT {
 						.withCookie(new org.mockserver.model.Cookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW")));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).cookiesSatisfies(c -> {
-				CookiesAssert.assertThat(c)
-						.extractCookie("sessionId")
-						.hasValue("2By8LOhBmaW5nZXJwcmludCIlMDAzMW")
-						.hasNoDomain()
-						.hasNoPath();
+			assertThat(response).hasStatusCode(Status.OK).cookiesSatisfies(c -> {
+				assertThat(c).extractCookie("sessionId").hasValue("2By8LOhBmaW5nZXJwcmludCIlMDAzMW").hasNoDomain().hasNoPath();
 			});
 		}
 	}

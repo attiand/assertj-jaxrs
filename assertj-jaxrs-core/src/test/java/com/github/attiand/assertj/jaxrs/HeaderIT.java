@@ -1,5 +1,6 @@
 package com.github.attiand.assertj.jaxrs;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.WebTarget;
@@ -16,8 +17,6 @@ import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.mockserver.model.HttpResponse;
 
-import com.github.attiand.assertj.jaxrs.asserts.HeadersAssert;
-import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
 @ExtendWith(AssertjJaxrsExtension.class)
@@ -31,7 +30,7 @@ class HeaderIT {
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
 		try (Response response = target.path("/resource").request().options()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasHeader(HttpHeaders.ALLOW).hasNoEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasHeader(HttpHeaders.ALLOW).hasNoEntity();
 		}
 	}
 
@@ -41,8 +40,8 @@ class HeaderIT {
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
 		try (Response response = target.path("/resource").request().options()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
-				HeadersAssert.assertThat(h).extractHeader(HttpHeaders.ALLOW).singleElement().isEqualTo("GET");
+			assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
+				assertThat(h).extractHeader(HttpHeaders.ALLOW).singleElement().isEqualTo("GET");
 			}).hasNoEntity();
 		}
 	}
@@ -53,8 +52,8 @@ class HeaderIT {
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET", "PUT")));
 
 		try (Response response = target.path("/resource").request().options()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
-				HeadersAssert.assertThat(h).extractHeader(HttpHeaders.ALLOW).containsExactlyInAnyOrder("GET", "PUT");
+			assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
+				assertThat(h).extractHeader(HttpHeaders.ALLOW).containsExactlyInAnyOrder("GET", "PUT");
 			}).hasNoEntity();
 		}
 	}

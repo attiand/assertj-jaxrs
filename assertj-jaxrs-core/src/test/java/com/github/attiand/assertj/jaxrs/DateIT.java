@@ -1,5 +1,6 @@
 package com.github.attiand.assertj.jaxrs;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.WebTarget;
@@ -14,7 +15,6 @@ import org.mockserver.junit.jupiter.MockServerSettings;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
-import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
 @ExtendWith(AssertjJaxrsExtension.class)
@@ -28,7 +28,7 @@ class DateIT {
 				.respond(HttpResponse.response().withStatusCode(200));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasNoDate().hasNoEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasNoDate().hasNoEntity();
 		}
 	}
 
@@ -38,7 +38,7 @@ class DateIT {
 				.respond(HttpResponse.response().withStatusCode(200));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasNoLastModifiedDate().hasNoEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasNoLastModifiedDate().hasNoEntity();
 		}
 	}
 }

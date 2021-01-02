@@ -2,28 +2,16 @@
 
 Lightweight library that provides AssertJ custom assertions to JAX-RS responses. 
 
-Example, check status code and header:
+Example:
 ```java
-
-try (Response response = target.path("/resource").request().options()) {
-   assertThat(response)
-      .hasStatusCode(Status.OK)
-      .containHeader(HttpHeaders.ALLOW)
-      .hasNoEntity();
-}
-```
-Example, check the entity:
-```java
-
 try (Response response = target.path("/resource").request().get()) {
-   assertThat(response)
-      .hasStatusCode(Status.OK)
+   assertThat(response).hasStatusCode(Status.OK)
+      .hasMediaType(MediaType.APPLICATION_JSON_TYPE)
       .entityAs(ExampleRepresentation.class)
-      .satisfies(e -> {
-         assertThat(e.getName()).isEqualTo("name");
-         assertThat(e.getValue()).isEqualTo(10);
+      .satisfies(r -> {
+         assertThat(r.getName()).isEqualTo("myname");
+         assertThat(r.getValue()).isEqualTo(10);
       });
-   }
 }
 ```
 For more examples se integration tests:
@@ -32,6 +20,7 @@ For more examples se integration tests:
 * [Cookies](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/CookieIT.java)
 * [Entity](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/EntityIT.java)
 * [MediaType](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/MediaTypeIT.java)
+* [Date](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/DateIT.java)
 
 Add the following dependency :
 ```xml
@@ -107,12 +96,12 @@ class GreetingResourceTest {
    @TestHTTPResource
    String uri;
 
-	private static final Client client = ClientBuilder.newClient();
+   private static final Client client = ClientBuilder.newClient();
 
-	@AfterAll
-	static void afterAll() {
-		client.close();
-	}
+   @AfterAll
+   static void afterAll() {
+      client.close();
+   }
 
    @Test
    void testHelloEndpointJaxrs() {

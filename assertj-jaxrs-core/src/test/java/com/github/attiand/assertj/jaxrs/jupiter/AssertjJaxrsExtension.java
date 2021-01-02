@@ -11,6 +11,10 @@ import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 
+/**
+ * Only for core test, see assertj-jaxts-junit-jupiter.
+ */
+
 public class AssertjJaxrsExtension implements ParameterResolver, BeforeAllCallback, AfterAllCallback {
 
 	private static final String TARGET = "http://localhost:8081";

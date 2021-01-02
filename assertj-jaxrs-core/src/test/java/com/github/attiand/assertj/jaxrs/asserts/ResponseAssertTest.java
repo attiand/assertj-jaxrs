@@ -115,4 +115,42 @@ class ResponseAssertTest {
 			}).isInstanceOf(AssertionError.class).hasMessage("Expected message to have media type but did not");
 		}
 	}
+
+	@Nested
+	class MessageLength {
+
+		@Test
+		void shouldAcceptValidLength() {
+			Response response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
+			assertThat(response).hasValidLength().hasLength(10);
+		}
+
+		@Test
+		void shouldAssertWrongWrongLength() {
+			Response response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
+
+			ResponseAssert cut = assertThat(response);
+
+			assertThatThrownBy(() -> {
+				cut.hasLength(9);
+			}).isInstanceOf(AssertionError.class).hasMessage("Expected length to be <9> but was <10>");
+		}
+
+		@Test
+		void shouldAssertInvalidLength() {
+			Response response = Response.ok().build();
+
+			ResponseAssert cut = assertThat(response);
+
+			assertThatThrownBy(() -> {
+				cut.hasValidLength();
+			}).isInstanceOf(AssertionError.class).hasMessage("Expected length to be valid but was not <-1>");
+		}
+
+		@Test
+		void shouldUseIntegerAssert() {
+			Response response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
+			assertThat(response).hasValidLength().length().isBetween(9, 11);
+		}
+	}
 }

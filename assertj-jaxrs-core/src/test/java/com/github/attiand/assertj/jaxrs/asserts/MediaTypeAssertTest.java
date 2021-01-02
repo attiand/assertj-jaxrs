@@ -1,5 +1,6 @@
 package com.github.attiand.assertj.jaxrs.asserts;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -11,9 +12,8 @@ class MediaTypeAssertTest {
 
 	@Test
 	void shouldAcceptSatisfiedMediaType() {
-		MediaTypeAssert.assertThat(MediaType.valueOf("text/html; charset=UTF-8")).satisfies(ct -> {
-			MediaTypeAssert.assertThat(ct)
-					.hasType("text")
+		assertThat(MediaType.valueOf("text/html; charset=UTF-8")).satisfies(ct -> {
+			assertThat(ct).hasType("text")
 					.hasSubType("html")
 					.parameters()
 					.extractingByKey(MediaType.CHARSET_PARAMETER)
@@ -24,8 +24,8 @@ class MediaTypeAssertTest {
 
 	@Test
 	void shouldAssertSatisfiedMediaType() {
-		MediaTypeAssert.assertThat(MediaType.valueOf("text/html")).satisfies(ct -> {
-			MediaTypeAssert cut = MediaTypeAssert.assertThat(ct).hasType("text");
+		assertThat(MediaType.valueOf("text/html")).satisfies(ct -> {
+			MediaTypeAssert cut = assertThat(ct).hasType("text");
 
 			assertThatThrownBy(() -> {
 				cut.hasSubType("plain");

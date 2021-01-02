@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 
 import org.assertj.core.api.AbstractAssert;
+import org.assertj.core.api.IntegerAssert;
 import org.assertj.core.api.ObjectAssert;
 import org.assertj.core.api.StringAssert;
 
@@ -79,6 +80,30 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 
 	public <U> ObjectAssert<U> entityAs(Class<U> clazz) {
 		return new ObjectAssert<>(actual.readEntity(clazz));
+	}
+
+	public ResponseAssert hasLength(int length) {
+		isNotNull();
+
+		if (actual.getLength() != length) {
+			failWithMessage("Expected length to be <%s> but was <%s>", length, actual.getLength());
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasValidLength() {
+		isNotNull();
+
+		if (actual.getLength() == -1) {
+			failWithMessage("Expected length to be valid but was not <%s>", actual.getLength());
+		}
+
+		return this;
+	}
+
+	public IntegerAssert length() {
+		return new IntegerAssert(actual.getLength());
 	}
 
 	public ResponseAssert hasCookie(String cookie) {

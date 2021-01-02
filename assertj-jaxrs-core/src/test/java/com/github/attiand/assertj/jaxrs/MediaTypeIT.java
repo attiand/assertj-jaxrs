@@ -1,5 +1,6 @@
 package com.github.attiand.assertj.jaxrs;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.WebTarget;
@@ -15,8 +16,6 @@ import org.mockserver.junit.jupiter.MockServerSettings;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.HttpResponse;
 
-import com.github.attiand.assertj.jaxrs.asserts.MediaTypeAssert;
-import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 
 @ExtendWith(AssertjJaxrsExtension.class)
@@ -30,7 +29,7 @@ class MediaTypeIT {
 				.respond(HttpResponse.response().withStatusCode(200).withContentType(org.mockserver.model.MediaType.APPLICATION_JSON));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).hasMediaType(MediaType.APPLICATION_JSON_TYPE).hasEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasMediaType(MediaType.APPLICATION_JSON_TYPE).hasEntity();
 		}
 	}
 
@@ -42,9 +41,8 @@ class MediaTypeIT {
 						.withContentType(org.mockserver.model.MediaType.APPLICATION_JSON_UTF_8));
 
 		try (Response response = target.path("/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).mediaTypeSatisfies(mt -> {
-				MediaTypeAssert.assertThat(mt)
-						.hasType("application")
+			assertThat(response).hasStatusCode(Status.OK).mediaTypeSatisfies(mt -> {
+				assertThat(mt).hasType("application")
 						.hasSubType("json")
 						.parameters()
 						.extractingByKey(MediaType.CHARSET_PARAMETER)
