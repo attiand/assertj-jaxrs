@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Set the URI to the test target. If not specified uses the default URI, see {@link TestTargetBuilder}. 
+ * Set the URI to the test target. If not specified uses the default URI, see {@link AssertjJaxrsExtension}. 
  */
 
 @Retention(RetentionPolicy.RUNTIME)

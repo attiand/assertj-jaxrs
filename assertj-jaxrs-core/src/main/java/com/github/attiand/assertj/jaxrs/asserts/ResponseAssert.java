@@ -5,12 +5,14 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonReaderFactory;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
@@ -158,6 +160,14 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 		isNotNull();
 
 		requirements.accept(actual.getHeaders());
+
+		return this;
+	}
+
+	public ResponseAssert linksSatisfies(Consumer<Set<Link>> requirements) {
+		isNotNull();
+
+		requirements.accept(actual.getLinks());
 
 		return this;
 	}

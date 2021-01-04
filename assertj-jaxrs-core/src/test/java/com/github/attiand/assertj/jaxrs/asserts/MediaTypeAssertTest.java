@@ -23,9 +23,9 @@ class MediaTypeAssertTest {
 	}
 
 	@Test
-	void shouldAssertSatisfiedMediaType() {
+	void shouldAssertInvalidSubType() {
 		assertThat(MediaType.valueOf("text/html")).satisfies(ct -> {
-			MediaTypeAssert cut = assertThat(ct).hasType("text");
+			var cut = assertThat(ct).hasType("text");
 
 			assertThatThrownBy(() -> {
 				cut.hasSubType("plain");

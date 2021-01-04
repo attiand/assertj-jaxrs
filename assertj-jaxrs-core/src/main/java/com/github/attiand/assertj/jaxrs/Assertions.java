@@ -2,6 +2,7 @@ package com.github.attiand.assertj.jaxrs;
 
 import java.util.Map;
 
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.NewCookie;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.Response;
 import com.github.attiand.assertj.jaxrs.asserts.CookieAssert;
 import com.github.attiand.assertj.jaxrs.asserts.CookiesAssert;
 import com.github.attiand.assertj.jaxrs.asserts.HeadersAssert;
+import com.github.attiand.assertj.jaxrs.asserts.LinkAssert;
 import com.github.attiand.assertj.jaxrs.asserts.MediaTypeAssert;
 import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 
@@ -33,5 +35,9 @@ public interface Assertions {
 
 	public static MediaTypeAssert assertThat(MediaType mediaType) {
 		return new MediaTypeAssert(mediaType);
+	}
+
+	public static LinkAssert assertThat(Link link) {
+		return new LinkAssert(link);
 	}
 }

@@ -1,5 +1,7 @@
 package com.github.attiand.assertj.jaxrs.json;
 
+import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
+import static com.github.attiand.assertj.jaxrs.json.asserts.JsonObjectAssert.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.Client;
@@ -19,9 +21,6 @@ import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.mockserver.model.HttpResponse;
 
-import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
-import com.github.attiand.assertj.jaxrs.json.asserts.JsonObjectAssert;
-
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
 class JsonPointerIT {
@@ -37,9 +36,9 @@ class JsonPointerIT {
 						.withBody("{\"name\":\"myname\",\"value\":10}"));
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
-			ResponseAssert.assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
-				JsonObjectAssert.assertThat(o).path("/name").asString().isEqualTo("myname");
-				JsonObjectAssert.assertThat(o).path("/value").asInteger().isEqualTo(10);
+			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
+				assertThat(o).path("/name").asString().isEqualTo("myname");
+				assertThat(o).path("/value").asInteger().isEqualTo(10);
 			});
 		}
 	}

@@ -74,9 +74,9 @@ class EntityIT {
 			assertThat(response).hasStatusCode(Status.OK)
 					.hasMediaType(MediaType.APPLICATION_JSON_TYPE)
 					.entityAs(ExampleRepresentation.class)
-					.satisfies(r -> {
-						assertThat(r.getName()).isEqualTo("myname");
-						assertThat(r.getValue()).isEqualTo(10);
+					.satisfies(e -> {
+						assertThat(e.getName()).isEqualTo("myname");
+						assertThat(e.getValue()).isEqualTo(10);
 					});
 		}
 	}

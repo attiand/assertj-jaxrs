@@ -18,29 +18,29 @@ class ResponseAssertTest {
 	class DateHeader {
 
 		@Test
-		void shouldAcceptDate() {
-			Response response = Response.ok().header(HttpHeaders.DATE, new Date(0)).build();
+		void shouldAcceptValidDate() {
+			var response = Response.ok().header(HttpHeaders.DATE, new Date(0)).build();
 			assertThat(response).hasDate().hasDate(new Date(0));
 		}
 
 		@Test
-		void shouldAssertWrongDate() {
-			Response response = Response.ok().header(HttpHeaders.DATE, new Date(0)).build();
+		void shouldAssertInvalidDate() {
+			var response = Response.ok().header(HttpHeaders.DATE, new Date(0)).build();
 
-			ResponseAssert cut = assertThat(response);
+			var cut = assertThat(response);
 
-			Date wrongDate = new Date(1);
+			var invalidDate = new Date(1);
 
 			assertThatThrownBy(() -> {
-				cut.hasDate(wrongDate);
+				cut.hasDate(invalidDate);
 			}).isInstanceOf(AssertionError.class).hasMessageStartingWith("Expected date to be").hasMessageContaining("but was");
 		}
 
 		@Test
 		void shouldAssertNoDate() {
-			Response response = Response.ok().build();
+			var response = Response.ok().build();
 
-			ResponseAssert cut = assertThat(response).hasNoDate();
+			var cut = assertThat(response).hasNoDate();
 
 			assertThatThrownBy(() -> {
 				cut.hasDate();
@@ -52,21 +52,21 @@ class ResponseAssertTest {
 	class LastModifiedDateHeader {
 
 		@Test
-		void shouldAcceptLastModifiedDate() {
-			Response response = Response.ok().header(HttpHeaders.LAST_MODIFIED, new Date(0)).build();
+		void shouldAcceptValidLastModifiedDate() {
+			var response = Response.ok().header(HttpHeaders.LAST_MODIFIED, new Date(0)).build();
 			assertThat(response).hasLastModifiedDate().hasLastModifiedDate(new Date(0));
 		}
 
 		@Test
-		void shouldAssertWrongLastModifiedDate() {
-			Response response = Response.ok().header(HttpHeaders.LAST_MODIFIED, new Date(0)).build();
+		void shouldAssertInvalidLastModifiedDate() {
+			var response = Response.ok().header(HttpHeaders.LAST_MODIFIED, new Date(0)).build();
 
-			ResponseAssert cut = assertThat(response);
+			var cut = assertThat(response);
 
-			Date wrongDate = new Date(1);
+			var invalidDate = new Date(1);
 
 			assertThatThrownBy(() -> {
-				cut.hasLastModifiedDate(wrongDate);
+				cut.hasLastModifiedDate(invalidDate);
 			}).isInstanceOf(AssertionError.class)
 					.hasMessageStartingWith("Expected last modified date to be")
 					.hasMessageContaining("but was");
@@ -74,9 +74,9 @@ class ResponseAssertTest {
 
 		@Test
 		void shouldAssertNoLastModified() {
-			Response response = Response.ok().build();
+			var response = Response.ok().build();
 
-			ResponseAssert cut = assertThat(response).hasNoLastModifiedDate();
+			var cut = assertThat(response).hasNoLastModifiedDate();
 
 			assertThatThrownBy(() -> {
 				cut.hasLastModifiedDate();
@@ -88,16 +88,16 @@ class ResponseAssertTest {
 	class MediaTypeHeader {
 
 		@Test
-		void shouldAcceptMediaType() {
-			Response response = Response.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).build();
+		void shouldAcceptValidMediaType() {
+			var response = Response.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).build();
 			assertThat(response).hasMediaType().hasMediaType(MediaType.APPLICATION_JSON_TYPE);
 		}
 
 		@Test
-		void shouldAssertWrongMediaType() {
-			Response response = Response.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).build();
+		void shouldAssertInvalidMediaType() {
+			var response = Response.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON).build();
 
-			ResponseAssert cut = assertThat(response);
+			var cut = assertThat(response);
 
 			assertThatThrownBy(() -> {
 				cut.hasMediaType(MediaType.APPLICATION_XML_TYPE);
@@ -106,9 +106,9 @@ class ResponseAssertTest {
 
 		@Test
 		void shouldAssertNoMediaType() {
-			Response response = Response.ok().build();
+			var response = Response.ok().build();
 
-			ResponseAssert cut = assertThat(response).hasNoMediaType();
+			var cut = assertThat(response).hasNoMediaType();
 
 			assertThatThrownBy(() -> {
 				cut.hasMediaType();
@@ -121,15 +121,15 @@ class ResponseAssertTest {
 
 		@Test
 		void shouldAcceptValidLength() {
-			Response response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
+			var response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
 			assertThat(response).hasValidLength().hasLength(10);
 		}
 
 		@Test
-		void shouldAssertWrongWrongLength() {
-			Response response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
+		void shouldAssertWrongLength() {
+			var response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
 
-			ResponseAssert cut = assertThat(response);
+			var cut = assertThat(response);
 
 			assertThatThrownBy(() -> {
 				cut.hasLength(9);
@@ -138,9 +138,9 @@ class ResponseAssertTest {
 
 		@Test
 		void shouldAssertInvalidLength() {
-			Response response = Response.ok().build();
+			var response = Response.ok().build();
 
-			ResponseAssert cut = assertThat(response);
+			var cut = assertThat(response);
 
 			assertThatThrownBy(() -> {
 				cut.hasValidLength();
@@ -149,7 +149,7 @@ class ResponseAssertTest {
 
 		@Test
 		void shouldUseIntegerAssert() {
-			Response response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
+			var response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
 			assertThat(response).hasValidLength().length().isBetween(9, 11);
 		}
 	}

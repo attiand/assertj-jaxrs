@@ -8,9 +8,9 @@ try (Response response = target.path("/resource").request().get()) {
    assertThat(response).hasStatusCode(Status.OK)
       .hasMediaType(MediaType.APPLICATION_JSON_TYPE)
       .entityAs(ExampleRepresentation.class)
-      .satisfies(r -> {
-         assertThat(r.getName()).isEqualTo("myname");
-         assertThat(r.getValue()).isEqualTo(10);
+      .satisfies(e -> {
+         assertThat(e.getName()).isEqualTo("myname");
+         assertThat(e.getValue()).isEqualTo(10);
       });
 }
 ```
@@ -21,6 +21,7 @@ For more examples se integration tests:
 * [Entity](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/EntityIT.java)
 * [MediaType](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/MediaTypeIT.java)
 * [Date](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/DateIT.java)
+* [Link](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/LinkIT.java)
 
 Add the following dependency :
 ```xml
@@ -31,18 +32,25 @@ Add the following dependency :
     <scope>test</scope>
 </dependency>
 ```
+You also need a jaxrs client implementation, for example: 
+
+<dependency>
+    <groupId>org.jboss.resteasy</groupId>
+    <artifactId>resteasy-client</artifactId>
+    <scope>test</scope>
+</dependency>
 
 # Json Pointer
 
 Simple support for asserting JSON Pointer values if you don't have the entity type available:
 ```java
 try (Response response = target.path("/resource").request().get()) {
-   ResponseAssert.assertThat(response)
+   assertThat(response)
       .hasStatusCode(Status.OK)
       .entityAsJson()
       .satisfies(e -> {
-         JsonObjectAssert.assertThat(e).path("/name").asString().isEqualTo("name");
-         JsonObjectAssert.assertThat(e).path("/value").asInteger().isEqualTo(10);
+         assertThat(e).path("/name").asString().isEqualTo("name");
+         assertThat(e).path("/value").asInteger().isEqualTo(10);
     });
 }
 ```
@@ -60,7 +68,6 @@ You also need a `javax.json-api` implementation, for example:
 <dependency>
     <groupId>org.eclipse</groupId>
     <artifactId>yasson</artifactId>
-    <version>1.0.8</version>
     <scope>test</scope>
 </dependency>
 ```
