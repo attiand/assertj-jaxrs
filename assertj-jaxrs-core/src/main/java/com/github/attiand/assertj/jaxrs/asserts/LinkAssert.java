@@ -57,8 +57,11 @@ public class LinkAssert extends AbstractAssert<LinkAssert, Link> {
 		return this;
 	}
 
+	public LinkAssert hasUri(String uri) {
+		return hasUri(URI.create(uri));
+	}
+
 	public MapAssert<String, String> parameters() {
 		return new MapAssert<>(actual.getParams());
 	}
-
 }

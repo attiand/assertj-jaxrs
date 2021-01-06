@@ -4,6 +4,7 @@ import static com.github.attiand.assertj.jaxrs.asserts.ResponseAssert.assertThat
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Date;
+import java.util.Locale;
 
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -14,18 +15,20 @@ import org.junit.jupiter.api.Test;
 
 class ResponseAssertTest {
 
+	private static final Date EPOCH = new Date(0);
+
 	@Nested
 	class DateHeader {
 
 		@Test
 		void shouldAcceptValidDate() {
-			var response = Response.ok().header(HttpHeaders.DATE, new Date(0)).build();
-			assertThat(response).hasDate().hasDate(new Date(0));
+			var response = Response.ok().header(HttpHeaders.DATE, EPOCH).build();
+			assertThat(response).hasDate().hasDate(EPOCH);
 		}
 
 		@Test
 		void shouldAssertInvalidDate() {
-			var response = Response.ok().header(HttpHeaders.DATE, new Date(0)).build();
+			var response = Response.ok().header(HttpHeaders.DATE, EPOCH).build();
 
 			var cut = assertThat(response);
 
@@ -53,13 +56,13 @@ class ResponseAssertTest {
 
 		@Test
 		void shouldAcceptValidLastModifiedDate() {
-			var response = Response.ok().header(HttpHeaders.LAST_MODIFIED, new Date(0)).build();
-			assertThat(response).hasLastModifiedDate().hasLastModifiedDate(new Date(0));
+			var response = Response.ok().header(HttpHeaders.LAST_MODIFIED, EPOCH).build();
+			assertThat(response).hasLastModifiedDate().hasLastModifiedDate(EPOCH);
 		}
 
 		@Test
 		void shouldAssertInvalidLastModifiedDate() {
-			var response = Response.ok().header(HttpHeaders.LAST_MODIFIED, new Date(0)).build();
+			var response = Response.ok().header(HttpHeaders.LAST_MODIFIED, EPOCH).build();
 
 			var cut = assertThat(response);
 
@@ -151,6 +154,59 @@ class ResponseAssertTest {
 		void shouldUseIntegerAssert() {
 			var response = Response.ok().header(HttpHeaders.CONTENT_LENGTH, 10).build();
 			assertThat(response).hasValidLength().length().isBetween(9, 11);
+		}
+	}
+
+	@Nested
+	class Langugage {
+
+		private static final String LOCALE = "en-US";
+
+		@Test
+		void shouldAcceptValidLangugage() {
+			var response = Response.ok().header(HttpHeaders.CONTENT_LANGUAGE, LOCALE).build();
+			assertThat(response).hasLanguage(Locale.US);
+		}
+
+		@Test
+		void shouldAssertInvalidLanguage() {
+			var response = Response.ok().header(HttpHeaders.CONTENT_LANGUAGE, LOCALE).build();
+
+			var cut = assertThat(response);
+
+			assertThatThrownBy(() -> {
+				cut.hasLanguage(Locale.UK);
+			}).isInstanceOf(AssertionError.class).hasMessage("Expected language to be <en_GB> but was <en_US>");
+		}
+	}
+
+	@Nested
+	class Location {
+
+		private static final String LOCATION = "http://www.example.com/index.html";
+
+		@Test
+		void shouldAcceptValidLocation() {
+			var response = Response.ok().header(HttpHeaders.LOCATION, LOCATION).build();
+			assertThat(response).hasLocation().hasLocation(LOCATION);
+		}
+
+		@Test
+		void shouldAcceptInValidLocation() {
+			var response = Response.ok().build();
+			assertThat(response).hasNoLocation();
+		}
+
+		@Test
+		void shouldAssertInvalidLocation() {
+			var response = Response.ok().header(HttpHeaders.LOCATION, LOCATION).build();
+
+			var cut = assertThat(response);
+
+			assertThatThrownBy(() -> {
+				cut.hasLocation("http://www.example.com");
+			}).isInstanceOf(AssertionError.class)
+					.hasMessage("Expected location to be <http://www.example.com> but was <http://www.example.com/index.html>");
 		}
 	}
 }

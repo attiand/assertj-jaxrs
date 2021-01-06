@@ -41,7 +41,7 @@ class HeaderIT {
 
 		try (Response response = target.path("/resource").request().options()) {
 			assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
-				assertThat(h).extractHeader(HttpHeaders.ALLOW).singleElement().isEqualTo("GET");
+				assertThat(h).extract(HttpHeaders.ALLOW).singleElement().isEqualTo("GET");
 			}).hasNoEntity();
 		}
 	}
@@ -53,7 +53,7 @@ class HeaderIT {
 
 		try (Response response = target.path("/resource").request().options()) {
 			assertThat(response).hasStatusCode(Status.OK).headersSatisfies(h -> {
-				assertThat(h).extractHeader(HttpHeaders.ALLOW).containsExactlyInAnyOrder("GET", "PUT");
+				assertThat(h).extract(HttpHeaders.ALLOW).containsExactlyInAnyOrder("GET", "PUT");
 			}).hasNoEntity();
 		}
 	}

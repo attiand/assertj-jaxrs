@@ -21,6 +21,11 @@ class LinkAssertTest {
 	}
 
 	@Test
+	void shouldAcceptValidValuesUriAsString() {
+		assertThat(LINK).hasRel("update").hasType("text/plain").hasUri("http://localhost/root/customers/1234");
+	}
+
+	@Test
 	void shouldAcceptValidParameter() {
 		assertThat(LINK).parameters().contains(entry("myparam", "myvalue"));
 	}

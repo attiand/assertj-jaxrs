@@ -1,8 +1,9 @@
 package com.github.attiand.assertj.jaxrs;
 
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
+
+import java.util.Locale;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
@@ -23,22 +24,15 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @ExtendWith(AssertjJaxrsExtension.class)
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
-class LinkIT {
+class LanguageIT {
 
 	@Test
-	void shouldAcceptValidLink(ClientAndServer server, WebTarget target) {
+	void shouldAcceptValidLanguage(ClientAndServer server, WebTarget target) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
-				.respond(HttpResponse.response()
-						.withStatusCode(200)
-						.withHeader(new Header(HttpHeaders.LINK,
-								"<http://localhost/root/customers/1234>; rel=\"update\"; type=\"text/plain\"")));
+				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.CONTENT_LANGUAGE, "en-US")));
 
 		try (Response response = target.path("/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).linksSatisfies(ls -> {
-				assertThat(ls).anySatisfy(l -> {
-					assertThat(l).hasRel("update").hasUri("http://localhost/root/customers/1234").hasType("text/plain");
-				});
-			}).hasNoEntity();
+			assertThat(response).hasStatusCode(Status.OK).hasLanguage(Locale.US).hasNoEntity();
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.github.attiand.assertj.jaxrs;
 
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.WebTarget;
@@ -40,8 +41,10 @@ class CookieIT {
 						.withCookie(new org.mockserver.model.Cookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW")));
 
 		try (Response response = target.path("/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).cookiesSatisfies(c -> {
-				assertThat(c).extractCookie("sessionId").hasValue("2By8LOhBmaW5nZXJwcmludCIlMDAzMW").hasNoDomain().hasNoPath();
+			assertThat(response).hasStatusCode(Status.OK).cookiesSatisfies(cs -> {
+				assertThat(cs).hasEntrySatisfying("sessionId", c -> {
+					assertThat(c).hasValue("2By8LOhBmaW5nZXJwcmludCIlMDAzMW").hasNoDomain().hasNoPath();
+				});
 			});
 		}
 	}

@@ -2,8 +2,10 @@ package com.github.attiand.assertj.jaxrs.asserts;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -116,6 +118,40 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 		}
 
 		return this;
+	}
+
+	public ResponseAssert hasLocation() {
+		isNotNull();
+
+		if (actual.getLocation() == null) {
+			failWithMessage("Expected message to have location but did not");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasNoLocation() {
+		isNotNull();
+
+		if (actual.getLocation() != null) {
+			failWithMessage("Expected message to have no location but did");
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasLocation(URI location) {
+		isNotNull();
+
+		if (!location.equals(actual.getLocation())) {
+			failWithMessage("Expected location to be <%s> but was <%s>", location, actual.getLocation());
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasLocation(String location) {
+		return hasLocation(URI.create(location));
 	}
 
 	public ResponseAssert cookiesSatisfies(Consumer<Map<String, NewCookie>> requirements) {
@@ -265,6 +301,16 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 
 		if (!date.equals(actual.getLastModified())) {
 			failWithMessage("Expected last modified date to be <%s> but was <%s>", date, actual.getLastModified());
+		}
+
+		return this;
+	}
+
+	public ResponseAssert hasLanguage(Locale language) {
+		isNotNull();
+
+		if (!language.equals(actual.getLanguage())) {
+			failWithMessage("Expected language to be <%s> but was <%s>", language, actual.getLanguage());
 		}
 
 		return this;

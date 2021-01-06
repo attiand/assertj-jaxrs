@@ -22,6 +22,8 @@ For more examples se integration tests:
 * [MediaType](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/MediaTypeIT.java)
 * [Date](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/DateIT.java)
 * [Link](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/LinkIT.java)
+* [Location](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/LocationIT.java)
+* [Language](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/LanguageIT.java)
 
 Add the following dependency :
 ```xml
@@ -34,11 +36,13 @@ Add the following dependency :
 ```
 You also need a jaxrs client implementation, for example: 
 
+```xml
 <dependency>
     <groupId>org.jboss.resteasy</groupId>
     <artifactId>resteasy-client</artifactId>
     <scope>test</scope>
 </dependency>
+```
 
 # Json Pointer
 

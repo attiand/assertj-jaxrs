@@ -1,7 +1,6 @@
 package com.github.attiand.assertj.jaxrs;
 
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.WebTarget;
@@ -23,22 +22,20 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @ExtendWith(AssertjJaxrsExtension.class)
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
-class LinkIT {
+class LocationIT {
 
 	@Test
-	void shouldAcceptValidLink(ClientAndServer server, WebTarget target) {
+	void shouldAcceptValidLocation(ClientAndServer server, WebTarget target) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
-						.withStatusCode(200)
-						.withHeader(new Header(HttpHeaders.LINK,
-								"<http://localhost/root/customers/1234>; rel=\"update\"; type=\"text/plain\"")));
+						.withStatusCode(301)
+						.withHeader(new Header(HttpHeaders.LOCATION, "http://www.example.com/index.html")));
 
 		try (Response response = target.path("/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).linksSatisfies(ls -> {
-				assertThat(ls).anySatisfy(l -> {
-					assertThat(l).hasRel("update").hasUri("http://localhost/root/customers/1234").hasType("text/plain");
-				});
-			}).hasNoEntity();
+
+			System.out.println(response.getLocation());
+
+			assertThat(response).hasStatusCode(Status.MOVED_PERMANENTLY).hasLocation("http://www.example.com/index.html").hasNoEntity();
 		}
 	}
 }
