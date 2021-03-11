@@ -3,6 +3,7 @@ package com.github.attiand.assertj.jaxrs;
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -22,8 +23,14 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class DateIT {
 
+	private final WebTarget target;
+
+	public DateIT(Client client) {
+		target = client.target("http://localhost:8081");
+	}
+
 	@Test
-	void shouldAcceptNonExistingDate(ClientAndServer server, WebTarget target) {
+	void shouldAcceptNonExistingDate(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 
@@ -33,7 +40,7 @@ class DateIT {
 	}
 
 	@Test
-	void shouldAcceptNonExistingLastModifiedDate(ClientAndServer server, WebTarget target) {
+	void shouldAcceptNonExistingLastModifiedDate(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 

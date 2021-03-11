@@ -3,6 +3,7 @@ package com.github.attiand.assertj.jaxrs;
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,8 +24,14 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class MediaTypeIT {
 
+	private final WebTarget target;
+
+	public MediaTypeIT(Client client) {
+		target = client.target("http://localhost:8081");
+	}
+
 	@Test
-	void shouldAcceptExistingtMediaType(ClientAndServer server, WebTarget target) {
+	void shouldAcceptExistingtMediaType(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withContentType(org.mockserver.model.MediaType.APPLICATION_JSON));
 
@@ -34,7 +41,7 @@ class MediaTypeIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedMediaType(ClientAndServer server, WebTarget target) {
+	void shouldAcceptSatisfiedMediaType(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)

@@ -4,6 +4,7 @@ import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -23,8 +24,15 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class CookieIT {
 
+	private final WebTarget target;
+
+	public CookieIT(Client client) {
+		target = client.target("http://localhost:8081");
+	}
+
 	@Test
-	void shouldAcceptExistingCookie(ClientAndServer server, WebTarget target) {
+	void shouldAcceptExistingCookie(ClientAndServer server) {
+
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withCookie("sessionId", "2By8LOhBmaW5nZXJwcmludCIlMDAzMW"));
 
@@ -34,7 +42,7 @@ class CookieIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedCookie(ClientAndServer server, WebTarget target) {
+	void shouldAcceptSatisfiedCookie(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)

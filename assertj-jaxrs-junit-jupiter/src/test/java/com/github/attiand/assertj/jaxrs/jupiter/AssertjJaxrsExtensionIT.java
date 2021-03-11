@@ -3,6 +3,7 @@ package com.github.attiand.assertj.jaxrs.jupiter;
 import static com.github.attiand.assertj.jaxrs.asserts.ResponseAssert.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
@@ -17,12 +18,13 @@ import org.mockserver.model.HttpResponse;
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8088 })
 @ExtendWith(AssertjJaxrsExtension.class)
-@AssertjJaxrsSettings(baseUri = "http://localhost:8088")
 class AssertjJaxrsExtensionIT {
 
 	@Test
-	void shouldAssertStatusCodeAsInteger(ClientAndServer client, WebTarget target) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	void shouldAssertStatusCodeAsInteger(ClientAndServer server, Client client) {
+		WebTarget target = client.target("http://localhost:8088");
+
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 
 		try (Response response = target.path("/resource").request().get()) {

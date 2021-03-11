@@ -4,6 +4,7 @@ import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -26,8 +27,14 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class EntityIT {
 
+	private final WebTarget target;
+
+	public EntityIT(Client client) {
+		target = client.target("http://localhost:8081");
+	}
+
 	@Test
-	void shouldAcceptExistingEntity(ClientAndServer server, WebTarget target) {
+	void shouldAcceptExistingEntity(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
@@ -40,7 +47,7 @@ class EntityIT {
 	}
 
 	@Test
-	void shouldAcceptNonExistingEntity(ClientAndServer server, WebTarget target) {
+	void shouldAcceptNonExistingEntity(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 
@@ -50,7 +57,7 @@ class EntityIT {
 	}
 
 	@Test
-	void shouldAcceptExistingTextEntity(ClientAndServer server, WebTarget target) {
+	void shouldAcceptExistingTextEntity(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
@@ -63,7 +70,7 @@ class EntityIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedTextEntity(ClientAndServer client, WebTarget target) {
+	void shouldAcceptSatisfiedTextEntity(ClientAndServer client) {
 		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
@@ -82,7 +89,7 @@ class EntityIT {
 	}
 
 	@Test
-	void shouldAcceptMessageLength(ClientAndServer server, WebTarget target) {
+	void shouldAcceptMessageLength(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)

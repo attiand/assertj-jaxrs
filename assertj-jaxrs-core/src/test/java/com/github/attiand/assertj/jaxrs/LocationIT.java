@@ -3,6 +3,7 @@ package com.github.attiand.assertj.jaxrs;
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -24,8 +25,14 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class LocationIT {
 
+	private final WebTarget target;
+
+	public LocationIT(Client client) {
+		target = client.target("http://localhost:8081");
+	}
+
 	@Test
-	void shouldAcceptValidLocation(ClientAndServer server, WebTarget target) {
+	void shouldAcceptValidLocation(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(301)

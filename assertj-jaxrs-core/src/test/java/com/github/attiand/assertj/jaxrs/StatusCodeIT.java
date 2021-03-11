@@ -4,6 +4,7 @@ import static com.github.attiand.assertj.jaxrs.asserts.ResponseAssert.assertThat
 import static javax.ws.rs.core.Response.Status.Family.SUCCESSFUL;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -23,27 +24,31 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class StatusCodeIT {
 
-	StatusCodeIT(ClientAndServer client) {
-		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+	private final WebTarget target;
+
+	StatusCodeIT(Client client, ClientAndServer server) {
+		target = client.target("http://localhost:8081");
+
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200));
 	}
 
 	@Test
-	void shouldAcceptStatusCodeAsInteger(WebTarget target) {
+	void shouldAcceptStatusCodeAsInteger() {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCode(200);
 		}
 	}
 
 	@Test
-	void shouldAcceptStatusCodeConstant(WebTarget target) {
+	void shouldAcceptStatusCodeConstant() {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCode(Status.OK);
 		}
 	}
 
 	@Test
-	void shouldAcceptStatusCodeFamily(WebTarget target) {
+	void shouldAcceptStatusCodeFamily() {
 		try (Response response = target.path("/resource").request().get()) {
 			assertThat(response).hasStatusCodeFamily(SUCCESSFUL);
 		}

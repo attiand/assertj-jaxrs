@@ -5,6 +5,7 @@ import static org.mockserver.model.HttpRequest.request;
 
 import java.util.Locale;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -26,8 +27,14 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class LanguageIT {
 
+	private final WebTarget target;
+
+	public LanguageIT(Client client) {
+		target = client.target("http://localhost:8081");
+	}
+
 	@Test
-	void shouldAcceptValidLanguage(ClientAndServer server, WebTarget target) {
+	void shouldAcceptValidLanguage(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.CONTENT_LANGUAGE, "en-US")));
 

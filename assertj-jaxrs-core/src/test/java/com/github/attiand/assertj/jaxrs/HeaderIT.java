@@ -3,6 +3,7 @@ package com.github.attiand.assertj.jaxrs;
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
@@ -24,8 +25,14 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class HeaderIT {
 
+	private final WebTarget target;
+
+	public HeaderIT(Client client) {
+		target = client.target("http://localhost:8081");
+	}
+
 	@Test
-	void shouldAcceptExsistingHeader(ClientAndServer server, WebTarget target) {
+	void shouldAcceptExsistingHeader(ClientAndServer server) {
 		server.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
@@ -35,7 +42,7 @@ class HeaderIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedHeader(ClientAndServer server, WebTarget target) {
+	void shouldAcceptSatisfiedHeader(ClientAndServer server) {
 		server.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET")));
 
@@ -47,7 +54,7 @@ class HeaderIT {
 	}
 
 	@Test
-	void shouldAcceptSatisfiedHeaderMultipleValues(ClientAndServer server, WebTarget target) {
+	void shouldAcceptSatisfiedHeaderMultipleValues(ClientAndServer server) {
 		server.when(request().withMethod("OPTIONS").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response().withStatusCode(200).withHeader(new Header(HttpHeaders.ALLOW, "GET", "PUT")));
 
