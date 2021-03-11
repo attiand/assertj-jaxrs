@@ -76,13 +76,14 @@ You also need a `javax.json-api` implementation, for example:
 </dependency>
 ```
 # JUnit Jupiter extension
-There is a JUnit 5 extension that provides a `WebTarget` parameter resolver.
+There is a JUnit 5 extension that provides a jax-rs `Client` parameter resolver that holds a single instance until all tests are executed.
 ```java
 @ExtendWith(AssertjJaxrsExtension.class)
-@AssertjJaxrsSettings(baseUri = "http://localhost:8088")
 class MyTest {
    @Test
-   void shouldAssertStatusCodeAsInteger(WebTarget target) {
+   void shouldAssertStatusCodeAsInteger(Client client) {
+      WebTarget target = client.target("http://localhost:8081");
+   
       try (Response response = target.path("/resource").request().get()) {
          assertThat(response).hasStatusCode(200);
       }

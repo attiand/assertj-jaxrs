@@ -6,6 +6,7 @@
     <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>assertj-jaxrs</name>
     <description>Provides assertj assertions to jaxrs responses</description>
     <url>https://github.com/attiand/assertj-jaxrs</url>
 
