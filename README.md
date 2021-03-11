@@ -1,4 +1,4 @@
-# assertj-jaxrs (Work In Progress)
+# assertj-jaxrs
 
 Lightweight library that provides AssertJ custom assertions to JAX-RS responses. 
 
@@ -94,7 +94,7 @@ Add the following dependency:
 ```xml
 <dependency>
     <groupId>com.github.attiand</groupId>
-    <artifactId>assertj-jaxts-junit-jupiter</artifactId>
+    <artifactId>assertj-jaxrs-junit-jupiter</artifactId>
     <version>${version}</version>
     <scope>test</scope>
 </dependency>
