@@ -3,7 +3,7 @@
 
     <groupId>com.github.attiand</groupId>
     <artifactId>assertj-jaxrs</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>Provides assertj assertions to jaxrs responses</description>
@@ -25,7 +25,7 @@
         <connection>scm:git:git@github.com:attiand/assertj-jaxr.git</connection>
         <url>https://github.com/attiand/assertj-jaxr</url>
         <developerConnection>scm:git:git@github.com:attiand/feed-archive-stream.git</developerConnection>
-        <tag>assertj-jaxrs-1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
