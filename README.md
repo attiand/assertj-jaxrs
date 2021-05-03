@@ -75,6 +75,30 @@ You also need a `javax.json-api` implementation, for example:
     <scope>test</scope>
 </dependency>
 ```
+
+# XML Xpath
+```java
+try (Response response = target.path("/resource").request().get()) {
+   assertThat(response)
+      .hasStatusCode(Status.OK)
+      .entityAsXml()
+      .satisfies(e -> {
+         assertThat(e).xpath("/user/name").asString().isEqualTo("name");
+         assertThat(e).xpath("/user/value").asInteger().isEqualTo(10);         
+    });
+}
+
+```
+Add the following dependency:
+```xml
+<dependency>
+    <groupId>com.github.attiand</groupId>
+    <artifactId>assertj-jaxrs-xml</artifactId>
+    <version>${version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
 # JUnit Jupiter extension
 There is a JUnit 5 extension that provides a jax-rs `Client` parameter resolver that holds a single instance until all tests are executed.
 ```java

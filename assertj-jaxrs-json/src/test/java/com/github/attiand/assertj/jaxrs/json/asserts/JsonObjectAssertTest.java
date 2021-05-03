@@ -1,5 +1,7 @@
 package com.github.attiand.assertj.jaxrs.json.asserts;
 
+import static com.github.attiand.assertj.jaxrs.json.asserts.JsonArrayAssert.assertThat;
+import static com.github.attiand.assertj.jaxrs.json.asserts.JsonObjectAssert.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
 import javax.json.Json;
@@ -24,27 +26,41 @@ class JsonObjectAssertTest {
 			.build();
 
 	@Test
+	void shouldAcceptJsonPointerAsObject() {
+		assertThat(JSON_OBJ).path("/phoneNumber/0").asJsonObject().satisfies(o -> {
+			assertThat(o).path("/number").asString().isEqualTo("212 555-1234");
+		});
+	}
+
+	@Test
+	void shouldAcceptJsonPointerAsArray() {
+		assertThat(JSON_OBJ).path("/phoneNumber").asJsonArray().satisfies(o -> {
+			assertThat(o).path("/1").asJsonObject().path("/number").asString().isEqualTo("646 555-4567");
+		});
+	}
+
+	@Test
 	void shouldAcceptJsonPointerAsString() {
-		JsonObjectAssert.assertThat(JSON_OBJ).path("/phoneNumber/0/number").asString().isEqualTo("212 555-1234");
+		assertThat(JSON_OBJ).path("/phoneNumber/0/number").asString().isEqualTo("212 555-1234");
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsInteger() {
-		JsonObjectAssert.assertThat(JSON_OBJ).path("/age").asInteger().isEqualTo(25);
+		assertThat(JSON_OBJ).path("/age").asInteger().isEqualTo(25);
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsDouble() {
-		JsonObjectAssert.assertThat(JSON_OBJ).path("/double").asDouble().isEqualTo(2.5, within(0.1));
+		assertThat(JSON_OBJ).path("/double").asDouble().isEqualTo(2.5, within(0.1));
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsTrue() {
-		JsonObjectAssert.assertThat(JSON_OBJ).path("/male").asBoolean().isTrue();
+		assertThat(JSON_OBJ).path("/male").asBoolean().isTrue();
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsFalse() {
-		JsonObjectAssert.assertThat(JSON_OBJ).path("/female").asBoolean().isFalse();
+		assertThat(JSON_OBJ).path("/female").asBoolean().isFalse();
 	}
 }

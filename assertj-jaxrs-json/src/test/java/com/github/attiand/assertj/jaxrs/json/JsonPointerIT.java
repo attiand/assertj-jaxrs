@@ -1,7 +1,7 @@
 package com.github.attiand.assertj.jaxrs.json;
 
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
-import static com.github.attiand.assertj.jaxrs.json.asserts.JsonObjectAssert.assertThat;
+import static com.github.attiand.assertj.jaxrs.json.asserts.JsonStructureAssert.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.Client;
@@ -28,7 +28,7 @@ class JsonPointerIT {
 	static Client client = ClientBuilder.newClient();
 
 	@Test
-	void shouldAssertJsonPointerBody(ClientAndServer server) {
+	void shouldAssertJsonObject(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(200)
@@ -39,6 +39,38 @@ class JsonPointerIT {
 			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
 				assertThat(o).path("/name").asString().isEqualTo("myname");
 				assertThat(o).path("/value").asInteger().isEqualTo(10);
+			});
+		}
+	}
+
+	@Test
+	void shouldAssertJsonArray(ClientAndServer server) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response()
+						.withStatusCode(200)
+						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+						.withBody("[\"one\", \"two\", \"tree\"]"));
+
+		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
+			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
+				assertThat(o).path("/0").asString().isEqualTo("one");
+				assertThat(o).path("/2").asString().isEqualTo("tree");
+			});
+		}
+	}
+
+	@Test
+	void shouldHandleNullValue(ClientAndServer server) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response()
+						.withStatusCode(200)
+						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+						.withBody("{\"name\":\"myname\",\"value\":null}"));
+
+		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
+			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
+				assertThat(o).path("/name").isNotNull().asString().isEqualTo("myname");
+				assertThat(o).path("/value").isNull();
 			});
 		}
 	}
