@@ -37,8 +37,8 @@ class JsonPointerIT {
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
 			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
-				assertThat(o).path("/name").asString().isEqualTo("myname");
-				assertThat(o).path("/value").asInteger().isEqualTo(10);
+				assertThat(o).pathValue("/name").asString().isEqualTo("myname");
+				assertThat(o).pathValue("/value").asInteger().isEqualTo(10);
 			});
 		}
 	}
@@ -53,8 +53,8 @@ class JsonPointerIT {
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
 			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
-				assertThat(o).path("/0").asString().isEqualTo("one");
-				assertThat(o).path("/2").asString().isEqualTo("tree");
+				assertThat(o).pathValue("/0").asString().isEqualTo("one");
+				assertThat(o).pathValue("/2").asString().isEqualTo("tree");
 			});
 		}
 	}
@@ -69,8 +69,8 @@ class JsonPointerIT {
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
 			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
-				assertThat(o).path("/name").isNotNull().asString().isEqualTo("myname");
-				assertThat(o).path("/value").isNull();
+				assertThat(o).pathValue("/name").isNotNull().asString().isEqualTo("myname");
+				assertThat(o).containsPath("/value").doesNotContainPath("/nonexist").pathValue("/value").isNull();
 			});
 		}
 	}

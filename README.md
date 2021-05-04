@@ -53,8 +53,8 @@ try (Response response = target.path("/resource").request().get()) {
       .hasStatusCode(Status.OK)
       .entityAsJson()
       .satisfies(e -> {
-         assertThat(e).path("/name").asString().isEqualTo("name");
-         assertThat(e).path("/value").asInteger().isEqualTo(10);
+         assertThat(e).pathValue("/name").asString().isEqualTo("name");
+         assertThat(e).pathValue("/value").asInteger().isEqualTo(10);
     });
 }
 ```
@@ -151,4 +151,9 @@ class GreetingResourceTest {
       }
    }    
 }
+
+# Revision history
+
+`1.0.0` - First version
+`2.0.0` - Added XPath, Json braking change path -> pathValue
 ```

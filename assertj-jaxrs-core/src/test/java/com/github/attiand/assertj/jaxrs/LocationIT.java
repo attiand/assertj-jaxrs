@@ -4,7 +4,6 @@ import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -25,24 +24,36 @@ import com.github.attiand.assertj.jaxrs.jupiter.AssertjJaxrsExtension;
 @MockServerSettings(ports = { 8081 })
 class LocationIT {
 
-	private final WebTarget target;
-
-	public LocationIT(Client client) {
-		target = client.target("http://localhost:8081");
-	}
+	private final static String BASE_URL = "http://localhost:8081";
 
 	@Test
-	void shouldAcceptValidLocation(ClientAndServer server) {
+	void shouldAcceptValidLocation(Client client, ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
 						.withStatusCode(301)
 						.withHeader(new Header(HttpHeaders.LOCATION, "http://www.example.com/index.html")));
 
-		try (Response response = target.path("/resource").request().get()) {
-
-			System.out.println(response.getLocation());
-
+		try (Response response = client.target(BASE_URL).path("/resource").request().get()) {
 			assertThat(response).hasStatusCode(Status.MOVED_PERMANENTLY).hasLocation("http://www.example.com/index.html").hasNoEntity();
+		}
+	}
+
+	@Test
+	void shouldCheckLocationURI(Client client, ClientAndServer server) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response().withStatusCode(301).withHeader(new Header(HttpHeaders.LOCATION, BASE_URL + "/new")));
+
+		server.when(request().withMethod("GET").withPath("/new"), Times.exactly(1))
+				.respond(HttpResponse.response().withStatusCode(200));
+
+		try (Response response = client.target(BASE_URL).path("/resource").request().get()) {
+			assertThat(response).hasStatusCode(Status.MOVED_PERMANENTLY).headersSatisfies(h -> {
+				assertThat(h).extract(HttpHeaders.LOCATION).map(String.class::cast).first().satisfies(l -> {
+					try (Response locationResponse = client.target(l).request().get()) {
+						assertThat(locationResponse).hasStatusCode(Status.OK);
+					}
+				});
+			});
 		}
 	}
 }

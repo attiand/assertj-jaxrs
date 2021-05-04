@@ -15,7 +15,33 @@ public class JsonStructureAssert extends AbstractAssert<JsonStructureAssert, Jso
 		return new JsonStructureAssert(structure);
 	}
 
-	public JsonValueAssert path(String path) {
+	public JsonValueAssert pathValue(String path) {
+		isNotNull();
+
+		if (!Json.createPointer(path).containsValue(actual)) {
+			failWithMessage("Expected json pointer expression to contain to a value");
+		}
+
 		return new JsonValueAssert(Json.createPointer(path).getValue(actual));
+	}
+
+	public JsonStructureAssert containsPath(String path) {
+		isNotNull();
+
+		if (!Json.createPointer(path).containsValue(actual)) {
+			failWithMessage("Expected json pointer expression to contain a value");
+		}
+
+		return this;
+	}
+
+	public JsonStructureAssert doesNotContainPath(String path) {
+		isNotNull();
+
+		if (Json.createPointer(path).containsValue(actual)) {
+			failWithMessage("Expected json pointer expression not to contain a value");
+		}
+
+		return this;
 	}
 }

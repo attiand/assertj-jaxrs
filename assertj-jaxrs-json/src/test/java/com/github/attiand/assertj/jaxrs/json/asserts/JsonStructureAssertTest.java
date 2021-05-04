@@ -1,5 +1,7 @@
 package com.github.attiand.assertj.jaxrs.json.asserts;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -14,13 +16,31 @@ class JsonStructureAssertTest {
 
 	@Test
 	void shouldAcceptJsonObject() {
-		JsonStructureAssert.assertThat(JSON_OBJ).path("/firstName").asString().isEqualTo("John");
+		JsonStructureAssert.assertThat(JSON_OBJ).pathValue("/firstName").asString().isEqualTo("John");
 	}
 
 	@Test
 	void shouldAcceptJsonArray() {
-		JsonStructureAssert.assertThat(JSON_ARRAY).path("/0").asString().isEqualTo("one");
-		JsonStructureAssert.assertThat(JSON_ARRAY).path("/2").asString().isEqualTo("tree");
+		JsonStructureAssert.assertThat(JSON_ARRAY).pathValue("/0").asString().isEqualTo("one");
+		JsonStructureAssert.assertThat(JSON_ARRAY).pathValue("/2").asString().isEqualTo("tree");
+	}
+
+	@Test
+	void shouldFailOnNonExistingPath() {
+		assertThatThrownBy(() -> {
+			JsonStructureAssert.assertThat(JSON_OBJ).pathValue("/nonexistent");
+		}).isInstanceOf(AssertionError.class).hasMessageContaining("Expected json pointer expression to contain to a value");
+
+	}
+
+	@Test
+	void shouldCheckExistingPath() {
+		JsonStructureAssert.assertThat(JSON_OBJ).containsPath("/firstName");
+	}
+
+	@Test
+	void shouldCheckForNonExistingPath() {
+		JsonStructureAssert.assertThat(JSON_OBJ).doesNotContainPath("/nonexistent");
 	}
 
 }
