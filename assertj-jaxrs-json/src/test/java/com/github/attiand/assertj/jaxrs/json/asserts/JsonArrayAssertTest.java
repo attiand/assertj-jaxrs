@@ -1,7 +1,12 @@
 package com.github.attiand.assertj.jaxrs.json.asserts;
 
+import static com.github.attiand.assertj.jaxrs.json.asserts.JsonArrayAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonString;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +16,50 @@ public class JsonArrayAssertTest {
 
 	@Test
 	void shouldAcceptJsonArray() {
-		JsonArrayAssert.assertThat(JSON_ARRAY).path("/0").asString().isEqualTo("one");
-		JsonArrayAssert.assertThat(JSON_ARRAY).path("/2").asString().isEqualTo("tree");
+		assertThat(JSON_ARRAY).pathValue("/0").asString().isEqualTo("one");
+		assertThat(JSON_ARRAY).pathValue("/2").asString().isEqualTo("tree");
+	}
+
+	@Test
+	void shouldExtractValue() {
+		assertThat(JSON_ARRAY).extracting(JsonString::getString).hasSize(3).containsExactly("one", "two", "tree");
+	}
+
+	@Test
+	void shouldAcceptAllSatisfy() {
+		assertThat(JSON_ARRAY).extracting(JsonString::getString).isNotEmpty().allSatisfy(v -> {
+			assertThat(v).hasSizeBetween(3, 4);
+		});
+	}
+
+	@Test
+	void shouldAssertAllSatisfy() {
+		assertThatThrownBy(() -> assertThat(JSON_ARRAY).extracting(JsonString::getString).isNotEmpty().allSatisfy(v -> {
+			assertThat(v).hasSizeBetween(4, 5);
+		})).isInstanceOf(AssertionError.class);
+	}
+
+	@Test
+	void shouldHandleArraySizeAssertions() {
+		assertThat(JSON_ARRAY).pathValue("")
+				.asJsonArray()
+				.isNotEmpty()
+				.hasSize(3)
+				.hasSizeGreaterThan(2)
+				.hasSizeGreaterThanOrEqualTo(3)
+				.hasSizeLessThan(4)
+				.hasSizeLessThanOrEqualTo(3)
+				.hasSizeBetween(2, 4);
+	}
+
+	@Test
+	void shouldAcceptEmpty() {
+		assertThat(Json.createArrayBuilder().build()).pathValue("").asJsonArray().isEmpty();
+	}
+
+	@Test
+	void shouldAssertWrongSize() {
+		assertThatThrownBy(() -> assertThat(JSON_ARRAY).pathValue("").asJsonArray().hasSize(4)).isInstanceOf(AssertionError.class)
+				.hasMessageContaining("Expected size:<4> but was:<3> in:");
 	}
 }

@@ -3,12 +3,18 @@ package com.github.attiand.assertj.jaxrs.json.asserts;
 import javax.json.Json;
 import javax.json.JsonStructure;
 
-import org.assertj.core.api.AbstractAssert;
+public class JsonStructureAssert extends AbstractJsonValueAssert<JsonStructureAssert> {
 
-public class JsonStructureAssert extends AbstractAssert<JsonStructureAssert, JsonStructure> {
+	private final JsonStructure actual;
 
 	public JsonStructureAssert(JsonStructure actual) {
 		super(actual, JsonStructureAssert.class);
+		this.actual = actual;
+	}
+
+	protected JsonStructureAssert(JsonStructure actual, Class<?> clazz) {
+		super(actual, clazz);
+		this.actual = actual;
 	}
 
 	public static JsonStructureAssert assertThat(JsonStructure structure) {

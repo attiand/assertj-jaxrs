@@ -1,7 +1,7 @@
 package com.github.attiand.assertj.jaxrs.json.asserts;
 
-import static com.github.attiand.assertj.jaxrs.json.asserts.JsonArrayAssert.assertThat;
 import static com.github.attiand.assertj.jaxrs.json.asserts.JsonObjectAssert.assertThat;
+import static com.github.attiand.assertj.jaxrs.json.asserts.JsonStructureAssert.assertThat;
 import static org.assertj.core.api.Assertions.within;
 
 import javax.json.Json;
@@ -27,40 +27,40 @@ class JsonObjectAssertTest {
 
 	@Test
 	void shouldAcceptJsonPointerAsObject() {
-		assertThat(JSON_OBJ).path("/phoneNumber/0").asJsonObject().satisfies(o -> {
-			assertThat(o).path("/number").asString().isEqualTo("212 555-1234");
+		assertThat(JSON_OBJ).pathValue("/phoneNumber/0").satisfies(o -> {
+			assertThat(o.asJsonObject()).pathValue("/number").asString().isEqualTo("212 555-1234");
 		});
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsArray() {
-		assertThat(JSON_OBJ).path("/phoneNumber").asJsonArray().satisfies(o -> {
-			assertThat(o).path("/1").asJsonObject().path("/number").asString().isEqualTo("646 555-4567");
+		assertThat(JSON_OBJ).pathValue("/phoneNumber").satisfies(o -> {
+			assertThat(o.asJsonArray()).pathValue("/1").asJsonObject().pathValue("/number").asString().isEqualTo("646 555-4567");
 		});
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsString() {
-		assertThat(JSON_OBJ).path("/phoneNumber/0/number").asString().isEqualTo("212 555-1234");
+		assertThat(JSON_OBJ).pathValue("/phoneNumber/0/number").asString().isEqualTo("212 555-1234");
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsInteger() {
-		assertThat(JSON_OBJ).path("/age").asInteger().isEqualTo(25);
+		assertThat(JSON_OBJ).pathValue("/age").asInteger().isEqualTo(25);
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsDouble() {
-		assertThat(JSON_OBJ).path("/double").asDouble().isEqualTo(2.5, within(0.1));
+		assertThat(JSON_OBJ).pathValue("/double").asDouble().isEqualTo(2.5, within(0.1));
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsTrue() {
-		assertThat(JSON_OBJ).path("/male").asBoolean().isTrue();
+		assertThat(JSON_OBJ).pathValue("/male").asBoolean().isTrue();
 	}
 
 	@Test
 	void shouldAcceptJsonPointerAsFalse() {
-		assertThat(JSON_OBJ).path("/female").asBoolean().isFalse();
+		assertThat(JSON_OBJ).pathValue("/female").asBoolean().isFalse();
 	}
 }
