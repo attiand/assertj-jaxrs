@@ -7,9 +7,9 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import com.github.attiand.assertj.jaxrs.asserts.CookieAssert;
-import com.github.attiand.assertj.jaxrs.asserts.MultivaluedMapAssert;
 import com.github.attiand.assertj.jaxrs.asserts.LinkAssert;
 import com.github.attiand.assertj.jaxrs.asserts.MediaTypeAssert;
+import com.github.attiand.assertj.jaxrs.asserts.MultivaluedMapAssert;
 import com.github.attiand.assertj.jaxrs.asserts.ResponseAssert;
 
 public interface Assertions {

@@ -1,6 +1,7 @@
 package com.github.attiand.assertj.jaxrs.json;
 
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
+import static com.github.attiand.assertj.jaxrs.json.EntityTypes.JSON;
 import static com.github.attiand.assertj.jaxrs.json.asserts.JsonStructureAssert.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
@@ -36,7 +37,7 @@ class JsonPointerIT {
 						.withBody("{\"name\":\"myname\",\"value\":10}"));
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
+			assertThat(response).hasStatusCode(Status.OK).entityAs(JSON).satisfies(o -> {
 				assertThat(o).pathValue("/name").asString().isEqualTo("myname");
 				assertThat(o).pathValue("/value").asInteger().isEqualTo(10);
 			});
@@ -52,7 +53,7 @@ class JsonPointerIT {
 						.withBody("[\"one\", \"two\", \"tree\"]"));
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
+			assertThat(response).hasStatusCode(Status.OK).entityAs(JSON).satisfies(o -> {
 				assertThat(o).pathValue("/0").asString().isEqualTo("one");
 				assertThat(o).pathValue("/2").asString().isEqualTo("tree");
 			});
@@ -68,7 +69,7 @@ class JsonPointerIT {
 						.withBody("{\"name\":\"myname\",\"value\":null}"));
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).entityAsJson().satisfies(o -> {
+			assertThat(response).hasStatusCode(Status.OK).entityAs(JSON).satisfies(o -> {
 				assertThat(o).pathValue("/name").isNotNull().asString().isEqualTo("myname");
 				assertThat(o).containsPath("/value").doesNotContainPath("/nonexist").pathValue("/value").isNull();
 			});

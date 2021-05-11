@@ -4,11 +4,11 @@
     <parent>
         <groupId>com.github.attiand</groupId>
         <artifactId>assertj-jaxrs</artifactId>
-        <version>2.0.0-alpha-03</version>
+        <version>2.0.0-rc-01</version>
     </parent>
     <artifactId>assertj-jaxrs-xml</artifactId>
-    
-      <dependencies>
+
+    <dependencies>
 
         <!-- 3PP -->
 
@@ -18,15 +18,13 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- TEST -->
-
         <dependency>
             <groupId>com.github.attiand</groupId>
             <artifactId>assertj-jaxrs-core</artifactId>
-            <version>2.0.0-alpha-03</version>
-            <scope>test</scope>
+            <version>2.0.0-rc-01</version>
         </dependency>
 
+        <!-- TEST -->
 
         <dependency>
             <groupId>org.mock-server</groupId>

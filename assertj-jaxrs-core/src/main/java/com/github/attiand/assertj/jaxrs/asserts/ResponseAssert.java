@@ -3,17 +3,13 @@ package com.github.attiand.assertj.jaxrs.asserts;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import javax.json.Json;
-import javax.json.JsonReader;
-import javax.json.JsonReaderFactory;
-import javax.json.JsonStructure;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -21,20 +17,16 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.IntegerAssert;
 import org.assertj.core.api.ObjectAssert;
 import org.assertj.core.api.StringAssert;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+
+import com.github.attiand.assertj.jaxrs.ext.EntityExtension;
+import com.github.attiand.assertj.jaxrs.ext.EntityType;
 
 public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
-
-	private JsonReaderFactory jsonFactory = Json.createReaderFactory(Collections.emptyMap());
 
 	public ResponseAssert(Response actual) {
 		super(actual, ResponseAssert.class);
@@ -78,23 +70,19 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 		return new StringAssert(actual.readEntity(String.class));
 	}
 
-	public JsonStructureAssert entityAsJson() {
-		try (InputStream is = actual.readEntity(InputStream.class); JsonReader reader = jsonFactory.createReader(is)) {
-			JsonStructure structure = reader.read();
-			return new JsonStructureAssert(structure);
+	public <U> ObjectAssert<U> entityAs(EntityType<U> type) {
+		@SuppressWarnings("unchecked")
+		EntityExtension<U> ext = (EntityExtension<U>) ServiceLoader.load(EntityExtension.class)
+				.stream()
+				.map(p -> p.get())
+				.filter(e -> e.type().equals(type.type()))
+				.findFirst()
+				.orElseThrow(() -> new AssertionError("Can't load extension for type: " + type.type()));
+
+		try (InputStream is = actual.readEntity(InputStream.class)) {
+			return new ObjectAssert<>(ext.load(is));
 		} catch (IOException e) {
 			throw new AssertionError("Could not parse Json entity", e);
-		}
-	}
-
-	public XmlDomAssert entityAsXml() {
-		try (InputStream is = actual.readEntity(InputStream.class)) {
-			DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = builderFactory.newDocumentBuilder();
-			Document document = builder.parse(is);
-			return new XmlDomAssert(document);
-		} catch (IOException | ParserConfigurationException | SAXException e) {
-			throw new AssertionError("Could not parse XML entity", e);
 		}
 	}
 

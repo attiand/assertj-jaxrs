@@ -51,7 +51,7 @@ Simple support for asserting JSON Pointer values if you don't have the entity ty
 try (Response response = target.path("/resource").request().get()) {
    assertThat(response)
       .hasStatusCode(Status.OK)
-      .entityAsJson()
+      .entityAs(JSON)
       .satisfies(e -> {
          assertThat(e).pathValue("/name").asString().isEqualTo("name");
          assertThat(e).pathValue("/value").asInteger().isEqualTo(10);
@@ -81,7 +81,7 @@ You also need a `javax.json-api` implementation, for example:
 try (Response response = target.path("/resource").request().get()) {
    assertThat(response)
       .hasStatusCode(Status.OK)
-      .entityAsXml()
+      .entityAs(XML)
       .satisfies(e -> {
          assertThat(e).xpath("/user/name").asString().isEqualTo("name");
          assertThat(e).xpath("/user/value").asInteger().isEqualTo(10);         

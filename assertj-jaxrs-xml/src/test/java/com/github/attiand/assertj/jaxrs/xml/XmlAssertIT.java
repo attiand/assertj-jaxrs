@@ -1,6 +1,7 @@
 package com.github.attiand.assertj.jaxrs.xml;
 
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
+import static com.github.attiand.assertj.jaxrs.xml.EntityTypes.XML;
 import static com.github.attiand.assertj.jaxrs.xml.asserts.DocumentAssert.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
@@ -36,7 +37,7 @@ public class XmlAssertIT {
 						.withBody("<test><str>hello</str><int>10</int><double>1.2</double></test>"));
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).entityAsXml().satisfies(o -> {
+			assertThat(response).hasStatusCode(Status.OK).entityAs(XML).satisfies(o -> {
 				assertThat(o).xpath("/test/str").asString().isEqualTo("hello");
 				assertThat(o).xpath("/test/int").asInteger().isEqualTo(10);
 				assertThat(o).xpath("/test/double").asDouble().isEqualTo(1.2);
