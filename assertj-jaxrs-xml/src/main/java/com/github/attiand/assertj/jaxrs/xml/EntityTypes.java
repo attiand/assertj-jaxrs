@@ -6,12 +6,6 @@ import com.github.attiand.assertj.jaxrs.ext.EntityType;
 
 public class EntityTypes {
 
-	public static final EntityType<Document> XML = new EntityType<>() {
+	public static final EntityType<Document> XML = new EntityType<>(Document.class);
 
-		@Override
-		public Class<Document> type() {
-			return Document.class;
-		}
-
-	};
 }

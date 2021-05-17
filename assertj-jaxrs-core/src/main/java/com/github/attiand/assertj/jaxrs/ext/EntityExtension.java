@@ -4,7 +4,9 @@ import java.io.InputStream;
 
 public interface EntityExtension<T> {
 
+	String id();
+
 	Class<T> type();
 
-	T load(InputStream is);
+	T create(InputStream is);
 }

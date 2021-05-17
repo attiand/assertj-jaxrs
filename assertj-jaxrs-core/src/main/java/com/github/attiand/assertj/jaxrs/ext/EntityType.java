@@ -1,6 +1,25 @@
 package com.github.attiand.assertj.jaxrs.ext;
 
-public interface EntityType<T> {
+public class EntityType<T> {
 
-	Class<T> type();
+	private final String id;
+
+	private final Class<T> type;
+
+	public EntityType(String id, Class<T> type) {
+		this.id = id;
+		this.type = type;
+	}
+
+	public EntityType(Class<T> type) {
+		this(type.getCanonicalName(), type);
+	}
+
+	public String id() {
+		return id;
+	}
+
+	public Class<T> type() {
+		return type;
+	}
 }

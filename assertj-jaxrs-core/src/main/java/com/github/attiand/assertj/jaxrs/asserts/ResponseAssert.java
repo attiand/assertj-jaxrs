@@ -6,7 +6,6 @@ import java.net.URI;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -23,7 +22,7 @@ import org.assertj.core.api.IntegerAssert;
 import org.assertj.core.api.ObjectAssert;
 import org.assertj.core.api.StringAssert;
 
-import com.github.attiand.assertj.jaxrs.ext.EntityExtension;
+import com.github.attiand.assertj.jaxrs.ext.EntityExtensionServiceLoader;
 import com.github.attiand.assertj.jaxrs.ext.EntityType;
 
 public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
@@ -71,18 +70,10 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 	}
 
 	public <U> ObjectAssert<U> entityAs(EntityType<U> type) {
-		@SuppressWarnings("unchecked")
-		EntityExtension<U> ext = (EntityExtension<U>) ServiceLoader.load(EntityExtension.class)
-				.stream()
-				.map(p -> p.get())
-				.filter(e -> e.type().equals(type.type()))
-				.findFirst()
-				.orElseThrow(() -> new AssertionError("Can't load extension for type: " + type.type()));
-
 		try (InputStream is = actual.readEntity(InputStream.class)) {
-			return new ObjectAssert<>(ext.load(is));
+			return new ObjectAssert<>(EntityExtensionServiceLoader.load(type, is));
 		} catch (IOException e) {
-			throw new AssertionError("Could not parse Json entity", e);
+			throw new AssertionError("Could not read entity", e);
 		}
 	}
 

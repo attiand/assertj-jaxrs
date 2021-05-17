@@ -6,12 +6,5 @@ import com.github.attiand.assertj.jaxrs.ext.EntityType;
 
 public class EntityTypes {
 
-	public static final EntityType<JsonStructure> JSON = new EntityType<>() {
-
-		@Override
-		public Class<JsonStructure> type() {
-			return JsonStructure.class;
-		}
-
-	};
+	public static final EntityType<JsonStructure> JSON = new EntityType<>(JsonStructure.class);
 }

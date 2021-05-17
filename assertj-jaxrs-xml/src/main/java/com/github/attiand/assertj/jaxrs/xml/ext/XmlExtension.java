@@ -11,16 +11,22 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import com.github.attiand.assertj.jaxrs.ext.EntityExtension;
+import com.github.attiand.assertj.jaxrs.xml.EntityTypes;
 
 public class XmlExtension implements EntityExtension<Document> {
 
 	@Override
-	public Class<Document> type() {
-		return Document.class;
+	public String id() {
+		return EntityTypes.XML.id();
 	}
 
 	@Override
-	public Document load(InputStream is) {
+	public Class<Document> type() {
+		return EntityTypes.XML.type();
+	}
+
+	@Override
+	public Document create(InputStream is) {
 		DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
 		try {
