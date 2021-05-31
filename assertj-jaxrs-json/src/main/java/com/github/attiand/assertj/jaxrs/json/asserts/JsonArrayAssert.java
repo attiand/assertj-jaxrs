@@ -37,7 +37,7 @@ public class JsonArrayAssert extends JsonStructureAssert {
 		return new ListAssert<>(tmp);
 	}
 
-	void isEmpty() {
+	public void isEmpty() {
 		iterables.assertEmpty(info, actual);
 	}
 
