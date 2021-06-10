@@ -3,7 +3,7 @@
 
     <groupId>com.github.attiand</groupId>
     <artifactId>assertj-jaxrs</artifactId>
-    <version>2.0.0-rc-03</version>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>assertj-jaxrs</name>
@@ -135,7 +135,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.4.1</version>
+                <configuration>
+                	<doclint>-missing</doclint>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

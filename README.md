@@ -158,3 +158,5 @@ class GreetingResourceTest {
 `1.0.0` - First version
 
 `2.0.0` - Added XPath, Json braking change path -> pathValue
+
+`2.0.1` - Added maven wrapper, javadoc builds on java 17
