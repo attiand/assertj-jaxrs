@@ -61,6 +61,24 @@ class JsonPointerIT {
 	}
 
 	@Test
+	void shouldAssertSubJsonObject(ClientAndServer server) {
+		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response()
+						.withStatusCode(200)
+						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+						.withBody("{\"a\": [{\"name\":\"myname\",\"value\":10}, {\"name\":\"myname2\",\"value\":11}]}"));
+
+		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
+			assertThat(response).hasStatusCode(Status.OK).entityAs(JSON).satisfies(e -> {
+				assertThat(e).pathValue("/a/0").satisfies(v -> {
+					assertThat(v.asJsonObject()).pathValue("/name").asString().isEqualTo("myname");
+					assertThat(v.asJsonObject()).pathValue("/value").asInteger().isEqualTo(10);
+				});
+			});
+		}
+	}
+
+	@Test
 	void shouldHandleNullValue(ClientAndServer server) {
 		server.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
 				.respond(HttpResponse.response()
