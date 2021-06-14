@@ -3,7 +3,7 @@
 
     <groupId>com.github.attiand</groupId>
     <artifactId>assertj-jaxrs</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>assertj-jaxrs</name>

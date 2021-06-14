@@ -6,16 +6,16 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.assertj.core.api.AbstractAssert;
-import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
-public class DocumentAssert extends AbstractAssert<DocumentAssert, Document> {
+public class NodeAssert extends AbstractAssert<NodeAssert, Node> {
 
-	public DocumentAssert(Document actual) {
-		super(actual, DocumentAssert.class);
+	public NodeAssert(Node actual) {
+		super(actual, NodeAssert.class);
 	}
 
-	public static DocumentAssert assertThat(Document document) {
-		return new DocumentAssert(document);
+	public static NodeAssert assertThat(Node document) {
+		return new NodeAssert(document);
 	}
 
 	public XPathExpressionAssert xpath(String expression) {
@@ -27,5 +27,15 @@ public class DocumentAssert extends AbstractAssert<DocumentAssert, Document> {
 		} catch (XPathExpressionException e) {
 			throw new AssertionError("Could not parse xpatch expression", e);
 		}
+	}
+
+	public NodeAssert hasType(short type) {
+		isNotNull();
+
+		if (actual.getNodeType() != type) {
+			failWithMessage("Expected node type to be <%s> but was <%s>", type, actual.getNodeType());
+		}
+
+		return this;
 	}
 }

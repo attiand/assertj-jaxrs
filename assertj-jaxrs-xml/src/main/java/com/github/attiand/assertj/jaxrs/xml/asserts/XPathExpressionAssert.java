@@ -8,16 +8,16 @@ import org.assertj.core.api.BooleanAssert;
 import org.assertj.core.api.DoubleAssert;
 import org.assertj.core.api.IntegerAssert;
 import org.assertj.core.api.StringAssert;
-import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 public class XPathExpressionAssert extends AbstractAssert<XPathExpressionAssert, XPathExpression> {
 
 	private static final String XPATH_EVALUATION_ERROR = "Could not evaluate xpatch expression";
-	private final Document document;
+	private final Node node;
 
-	public XPathExpressionAssert(XPathExpression actual, Document document) {
+	public XPathExpressionAssert(XPathExpression actual, Node node) {
 		super(actual, XPathExpressionAssert.class);
-		this.document = document;
+		this.node = node;
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class XPathExpressionAssert extends AbstractAssert<XPathExpressionAssert,
 		isNotNull();
 
 		try {
-			String result = actual.evaluateExpression(document, String.class);
+			String result = actual.evaluateExpression(node, String.class);
 
 			return new StringAssert(result);
 		} catch (XPathExpressionException e) {
@@ -37,7 +37,7 @@ public class XPathExpressionAssert extends AbstractAssert<XPathExpressionAssert,
 		isNotNull();
 
 		try {
-			Integer result = actual.evaluateExpression(document, Integer.class);
+			Integer result = actual.evaluateExpression(node, Integer.class);
 
 			return new IntegerAssert(result);
 		} catch (XPathExpressionException e) {
@@ -49,7 +49,7 @@ public class XPathExpressionAssert extends AbstractAssert<XPathExpressionAssert,
 		isNotNull();
 
 		try {
-			Double result = actual.evaluateExpression(document, Double.class);
+			Double result = actual.evaluateExpression(node, Double.class);
 
 			return new DoubleAssert(result);
 		} catch (XPathExpressionException e) {
@@ -61,9 +61,21 @@ public class XPathExpressionAssert extends AbstractAssert<XPathExpressionAssert,
 		isNotNull();
 
 		try {
-			Boolean result = actual.evaluateExpression(document, Boolean.class);
+			Boolean result = actual.evaluateExpression(node, Boolean.class);
 
 			return new BooleanAssert(result);
+		} catch (XPathExpressionException e) {
+			throw new AssertionError(XPATH_EVALUATION_ERROR, e);
+		}
+	}
+
+	public NodeAssert asNode() {
+		isNotNull();
+
+		try {
+			Node result = actual.evaluateExpression(node, Node.class);
+
+			return new NodeAssert(result);
 		} catch (XPathExpressionException e) {
 			throw new AssertionError(XPATH_EVALUATION_ERROR, e);
 		}

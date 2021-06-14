@@ -1,6 +1,7 @@
 package com.github.attiand.assertj.jaxrs.xml.asserts;
 
 import static com.github.attiand.assertj.jaxrs.xml.asserts.NodeAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,31 +12,31 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-class XPathExpressionAssertTest {
+class NodeAssertTest {
 
 	@Test
-	void shouldExtractStringFromNode() throws ParserConfigurationException {
+	void shouldExtractNodeFromExpression() throws ParserConfigurationException {
 		Node node = createDocument();
-		assertThat(node).xpath("/test/person/name").asString().isEqualTo("John");
+		assertThat(node).xpath("test/person").asNode().satisfies(n -> {
+			assertThat(n).xpath("name").asString().isEqualTo("John");
+		});
 	}
 
 	@Test
-	void shouldExtractIntegerFromNode() throws ParserConfigurationException {
+	void shouldAcceptNodeType() throws ParserConfigurationException {
 		Node node = createDocument();
-		assertThat(node).xpath("/test/person/age").asInteger().isEqualTo(20).isGreaterThan(19);
+		assertThat(node).xpath("test").asNode().hasType(Node.ELEMENT_NODE);
 	}
 
 	@Test
-	void shouldExtractDoubleFromNode() throws ParserConfigurationException {
+	void shouldAssertNodeType() throws ParserConfigurationException {
 		Node node = createDocument();
-		assertThat(node).xpath("/test/real").asDouble().isEqualTo(10.3).isBetween(10.2, 10.4);
-	}
 
-	@Test
-	void shouldExtractBooleanFromNode() throws ParserConfigurationException {
-		Node node = createDocument();
-		assertThat(node).xpath("boolean(/test/person/name)").asBoolean().isTrue();
-		assertThat(node).xpath("not(boolean(/test/person/name))").asBoolean().isFalse();
+		var cut = assertThat(node).xpath("test").asNode();
+
+		assertThatThrownBy(() -> cut.hasType(Node.DOCUMENT_NODE)).isInstanceOf(AssertionError.class)
+				.hasMessageContaining("Expected node type to be <9> but was <1>");
+
 	}
 
 	private static Document createDocument() throws ParserConfigurationException {
@@ -52,14 +53,6 @@ class XPathExpressionAssertTest {
 		Element name = doc.createElement("name");
 		name.setTextContent("John");
 		person.appendChild(name);
-
-		Element age = doc.createElement("age");
-		age.setTextContent(Integer.toString(20));
-		person.appendChild(age);
-
-		Element real = doc.createElement("real");
-		real.setTextContent(Double.toString(10.3));
-		root.appendChild(real);
 
 		return doc;
 	}

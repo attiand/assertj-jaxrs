@@ -2,7 +2,7 @@ package com.github.attiand.assertj.jaxrs.xml;
 
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static com.github.attiand.assertj.jaxrs.xml.EntityTypes.XML;
-import static com.github.attiand.assertj.jaxrs.xml.asserts.DocumentAssert.assertThat;
+import static com.github.attiand.assertj.jaxrs.xml.asserts.NodeAssert.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import javax.ws.rs.client.Client;
@@ -21,10 +21,11 @@ import org.mockserver.junit.jupiter.MockServerSettings;
 import org.mockserver.matchers.Times;
 import org.mockserver.model.Header;
 import org.mockserver.model.HttpResponse;
+import org.w3c.dom.Node;
 
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
-public class XmlAssertIT {
+class XmlAssertIT {
 
 	static Client client = ClientBuilder.newClient();
 
@@ -37,12 +38,15 @@ public class XmlAssertIT {
 						.withBody("<test><str>hello</str><int>10</int><double>1.2</double></test>"));
 
 		try (Response response = client.target("http://localhost:8081/resource").request().get()) {
-			assertThat(response).hasStatusCode(Status.OK).entityAs(XML).satisfies(o -> {
-				assertThat(o).xpath("/test/str").asString().isEqualTo("hello");
-				assertThat(o).xpath("/test/int").asInteger().isEqualTo(10);
-				assertThat(o).xpath("/test/double").asDouble().isEqualTo(1.2);
-				assertThat(o).xpath("/test/nonexist").asBoolean().isFalse();
-				assertThat(o).xpath("/test/str").asBoolean().isTrue();
+			assertThat(response).hasStatusCode(Status.OK).entityAs(XML).satisfies(d -> {
+				assertThat(d).xpath("/test/str").asString().isEqualTo("hello");
+				assertThat(d).xpath("/test/int").asInteger().isEqualTo(10);
+				assertThat(d).xpath("/test/double").asDouble().isEqualTo(1.2);
+				assertThat(d).xpath("/test/nonexist").asBoolean().isFalse();
+				assertThat(d).xpath("/test/str").asBoolean().isTrue();
+				assertThat(d).xpath("/test").asNode().hasType(Node.ELEMENT_NODE).satisfies(n -> {
+					assertThat(n).xpath("str").asString().isEqualTo("hello");
+				});
 			});
 		}
 	}
