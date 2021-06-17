@@ -25,7 +25,7 @@ import org.w3c.dom.Node;
 
 @ExtendWith(MockServerExtension.class)
 @MockServerSettings(ports = { 8081 })
-class XmlAssertIT {
+class NodeAssertIT {
 
 	static Client client = ClientBuilder.newClient();
 
