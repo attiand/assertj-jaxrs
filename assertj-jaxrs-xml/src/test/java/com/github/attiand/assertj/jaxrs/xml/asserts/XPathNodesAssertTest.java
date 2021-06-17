@@ -21,6 +21,20 @@ class XPathNodesAssertTest {
 	}
 
 	@Test
+	void shouldAcceptAttributeValue() throws ParserConfigurationException {
+		Node node = createDocument();
+		assertThat(node).xpath("test/name/@type").asNodeList().hasSize(3).extracting(Node::getTextContent).contains("t1", "t2", "t3");
+
+		assertThat(node).xpath("test/name")
+				.asNodeList()
+				.hasSize(3)
+				.extracting(Node::getAttributes)
+				.extracting(a -> a.getNamedItem("type"))
+				.extracting(Node::getNodeValue)
+				.contains("t1", "t2", "t3");
+	}
+
+	@Test
 	void shouldAssertListContent() throws ParserConfigurationException {
 		Node node = createDocument();
 
@@ -41,9 +55,10 @@ class XPathNodesAssertTest {
 		doc.appendChild(root);
 
 		for (int i = 0; i < 3; i++) {
-			Element name1 = doc.createElement("name");
-			name1.setTextContent("n" + (i + 1));
-			root.appendChild(name1);
+			Element name = doc.createElement("name");
+			name.setTextContent("n" + (i + 1));
+			name.setAttribute("type", "t" + (i + 1));
+			root.appendChild(name);
 		}
 
 		return doc;
