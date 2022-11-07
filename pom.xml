@@ -24,9 +24,9 @@
     </modules>
 
     <scm>
-        <connection>scm:git:git@github.com:attiand/assertj-jaxr.git</connection>
-        <url>https://github.com/attiand/assertj-jaxr</url>
-        <developerConnection>scm:git:git@github.com:attiand/feed-archive-stream.git</developerConnection>
+        <connection>scm:git:git@github.com:attiand/assertj-jaxrs.git</connection>
+        <url>https://github.com/attiand/assertj-jaxrs</url>
+        <developerConnection>scm:git:git@github.com:attiand/assertj-jaxrs.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
