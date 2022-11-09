@@ -3,10 +3,10 @@ package com.github.attiand.assertj.jaxrs.json.ext;
 import java.io.InputStream;
 import java.util.Collections;
 
-import javax.json.Json;
-import javax.json.JsonReader;
-import javax.json.JsonReaderFactory;
-import javax.json.JsonStructure;
+import jakarta.json.Json;
+import jakarta.json.JsonReader;
+import jakarta.json.JsonReaderFactory;
+import jakarta.json.JsonStructure;
 
 import com.github.attiand.assertj.jaxrs.ext.EntityExtension;
 import com.github.attiand.assertj.jaxrs.json.EntityTypes;

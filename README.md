@@ -149,7 +149,7 @@ class GreetingResourceTest {
             .entityAsText()
             .isEqualTo("Hello RESTEasy");
       }
-   }    
+   }
 }
 
 ```
@@ -161,4 +161,4 @@ class GreetingResourceTest {
 
 `2.0.1` - Added maven wrapper, javadoc builds on java 17
 
-`3.0.0` - Use jaxrs 3.0 (jakarta name space)
+`3.0.0` - Use jaxrs 3.0 & jsonp 2.0 (jakarta name space)

@@ -1,7 +1,7 @@
 package com.github.attiand.assertj.jaxrs.json.asserts;
 
-import javax.json.Json;
-import javax.json.JsonStructure;
+import jakarta.json.Json;
+import jakarta.json.JsonStructure;
 
 public class JsonStructureAssert extends AbstractJsonValueAssert<JsonStructureAssert> {
 

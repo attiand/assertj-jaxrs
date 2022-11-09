@@ -4,9 +4,9 @@ import static com.github.attiand.assertj.jaxrs.json.asserts.JsonArrayAssert.asse
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonString;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonString;
 
 import org.junit.jupiter.api.Test;
 

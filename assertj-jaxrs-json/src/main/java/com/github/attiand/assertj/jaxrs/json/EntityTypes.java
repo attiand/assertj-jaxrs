@@ -1,6 +1,6 @@
 package com.github.attiand.assertj.jaxrs.json;
 
-import javax.json.JsonStructure;
+import jakarta.json.JsonStructure;
 
 import com.github.attiand.assertj.jaxrs.ext.EntityType;
 

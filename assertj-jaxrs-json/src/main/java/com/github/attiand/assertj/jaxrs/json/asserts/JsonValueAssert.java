@@ -1,6 +1,6 @@
 package com.github.attiand.assertj.jaxrs.json.asserts;
 
-import javax.json.JsonValue;
+import jakarta.json.JsonValue;
 
 public class JsonValueAssert extends AbstractJsonValueAssert<JsonValueAssert> {
 

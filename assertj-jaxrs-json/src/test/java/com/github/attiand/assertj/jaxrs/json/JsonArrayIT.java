@@ -6,7 +6,7 @@ import static com.github.attiand.assertj.jaxrs.json.asserts.JsonStructureAssert.
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
-import javax.json.JsonString;
+import jakarta.json.JsonString;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.HttpHeaders;
