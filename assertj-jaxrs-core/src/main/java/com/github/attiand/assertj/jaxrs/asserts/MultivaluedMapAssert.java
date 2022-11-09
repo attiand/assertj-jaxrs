@@ -1,6 +1,6 @@
 package com.github.attiand.assertj.jaxrs.asserts;
 
-import javax.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.MultivaluedMap;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.ListAssert;

@@ -1,6 +1,6 @@
 package com.github.attiand.assertj.jaxrs.asserts;
 
-import javax.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.NewCookie;
 
 import org.assertj.core.api.AbstractAssert;
 

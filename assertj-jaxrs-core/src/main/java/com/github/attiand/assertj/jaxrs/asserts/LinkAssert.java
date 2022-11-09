@@ -2,7 +2,7 @@ package com.github.attiand.assertj.jaxrs.asserts;
 
 import java.net.URI;
 
-import javax.ws.rs.core.Link;
+import jakarta.ws.rs.core.Link;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.MapAssert;

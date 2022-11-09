@@ -160,3 +160,5 @@ class GreetingResourceTest {
 `2.0.0` - Added XPath, Json braking change path -> pathValue
 
 `2.0.1` - Added maven wrapper, javadoc builds on java 17
+
+`3.0.0` - Use jaxrs 3.0 (jakarta name space)

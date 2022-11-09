@@ -1,10 +1,10 @@
 package com.github.attiand.assertj.jaxrs;
 
-import javax.ws.rs.core.Link;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.NewCookie;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Link;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.Response;
 
 import com.github.attiand.assertj.jaxrs.asserts.CookieAssert;
 import com.github.attiand.assertj.jaxrs.asserts.LinkAssert;

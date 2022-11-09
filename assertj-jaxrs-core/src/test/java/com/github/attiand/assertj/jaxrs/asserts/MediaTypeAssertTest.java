@@ -4,7 +4,7 @@ import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import org.junit.jupiter.api.Test;
 

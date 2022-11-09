@@ -1,6 +1,6 @@
 package com.github.attiand.assertj.jaxrs.asserts;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.MapAssert;

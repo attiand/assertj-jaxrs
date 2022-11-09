@@ -3,7 +3,7 @@ package com.github.attiand.assertj.jaxrs.asserts;
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import javax.ws.rs.core.NewCookie;
+import jakarta.ws.rs.core.NewCookie;
 
 import org.junit.jupiter.api.Test;
 

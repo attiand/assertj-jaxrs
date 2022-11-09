@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.entry;
 
 import java.net.URI;
 
-import javax.ws.rs.core.Link;
+import jakarta.ws.rs.core.Link;
 
 import org.junit.jupiter.api.Test;
 
