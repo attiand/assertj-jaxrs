@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -79,6 +80,10 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 
 	public <U> ObjectAssert<U> entityAs(Class<U> clazz) {
 		return new ObjectAssert<>(actual.readEntity(clazz));
+	}
+
+	public <U> ObjectAssert<U> entityAs(GenericType<U> entityType) {
+		return new ObjectAssert<>(actual.readEntity(entityType));
 	}
 
 	public ResponseAssert hasLength(int length) {
