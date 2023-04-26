@@ -1,11 +1,14 @@
 package com.github.attiand.assertj.jaxrs;
 
+import java.util.List;
+
 import static com.github.attiand.assertj.jaxrs.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockserver.model.HttpRequest.request;
 
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -84,6 +87,26 @@ class EntityIT {
 					.satisfies(e -> {
 						assertThat(e.getName()).isEqualTo("myname");
 						assertThat(e.getValue()).isEqualTo(10);
+					});
+		}
+	}
+
+	@Test
+	void shouldAcceptSatisfiedListEntity(ClientAndServer client) {
+		client.when(request().withMethod("GET").withPath("/resource"), Times.exactly(1))
+				.respond(HttpResponse.response()
+						.withStatusCode(200)
+						.withHeader(new Header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+						.withBody("[{\"name\":\"myname\",\"value\":10}]"));
+
+		try (Response response = target.path("/resource").request().get()) {
+			assertThat(response).hasStatusCode(Status.OK)
+					.hasMediaType(MediaType.APPLICATION_JSON_TYPE)
+					.entityAs(new GenericType<List<ExampleRepresentation>>() {})
+					.satisfies(e -> {
+						assertThat(e.size()).isEqualTo(1);
+						assertThat(e.get(0).getName()).isEqualTo("myname");
+						assertThat(e.get(0).getValue()).isEqualTo(10);
 					});
 		}
 	}
