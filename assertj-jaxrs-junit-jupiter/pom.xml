@@ -14,7 +14,7 @@
         <dependency>
             <groupId>se.uhr.assertj</groupId>
             <artifactId>assertj-jaxrs-core</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- 3PP -->
