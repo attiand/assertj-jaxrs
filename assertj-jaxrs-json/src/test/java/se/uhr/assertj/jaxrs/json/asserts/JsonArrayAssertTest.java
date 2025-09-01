@@ -60,6 +60,6 @@ public class JsonArrayAssertTest {
 	@Test
 	void shouldAssertWrongSize() {
 		assertThatThrownBy(() -> assertThat(JSON_ARRAY).pathValue("").asJsonArray().hasSize(4)).isInstanceOf(AssertionError.class)
-				.hasMessageContaining("Expected size:<4> but was:<3> in:");
+				.hasMessageContaining("Expected size: 4 but was: 3 in:");
 	}
 }
