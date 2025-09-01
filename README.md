@@ -34,6 +34,17 @@ Add the following dependency :
     <scope>test</scope>
 </dependency>
 ```
+
+From repository:
+```xml
+<repositories>
+   <repository>
+      <id>github</id>
+      <url>https://maven.pkg.github.com/swedish-council-for-higher-education/assertj-jaxrs</url>
+   </repository>
+</repositories>
+```
+
 You also need a jaxrs client implementation, for example: 
 
 ```xml
@@ -84,7 +95,7 @@ try (Response response = target.path("/resource").request().get()) {
       .entityAs(XML)
       .satisfies(e -> {
          assertThat(e).xpath("/user/name").asString().isEqualTo("name");
-         assertThat(e).xpath("/user/value").asInteger().isEqualTo(10);         
+         assertThat(e).xpath("/user/value").asInteger().isEqualTo(10);
     });
 }
 
@@ -163,4 +174,4 @@ class GreetingResourceTest {
 
 `3.0.0` - Use jaxrs 3.0 & jsonp 2.0 (jakarta name space)
 
-`4.0.0` - Moved to UHR, new maven coordinates `se.uhr.assertj`
+`4.0.0` - Moved to UHR, new maven coordinates `se.uhr.assertj:assertj-jaxrs`
