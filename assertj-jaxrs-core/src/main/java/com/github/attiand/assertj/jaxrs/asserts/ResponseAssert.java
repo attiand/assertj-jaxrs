@@ -40,7 +40,7 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 		isNotNull();
 
 		if (actual.getStatus() != statusCode) {
-			failWithMessage("Expected status code to be <%s> but was <%s>", statusCode, actual.getStatus());
+			failWithMessage("Expected status code to be <%d> but was <%d>", statusCode, actual.getStatus());
 		}
 
 		return this;
@@ -49,8 +49,8 @@ public class ResponseAssert extends AbstractAssert<ResponseAssert, Response> {
 	public ResponseAssert hasStatusCode(Status status) {
 		isNotNull();
 
-		if (actual.getStatusInfo() != status) {
-			failWithMessage("Expected status code to be <%s> but was <%s>", status, actual.getStatus());
+		if (actual.getStatusInfo().getStatusCode() != status.getStatusCode()) {
+			failWithMessage("Expected status code to be <%s> (%d) but was <%d>", status, status.getStatusCode(), actual.getStatus());
 		}
 
 		return this;
