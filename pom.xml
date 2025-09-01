@@ -1,20 +1,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.attiand</groupId>
+    <groupId>se.uhr.assertj</groupId>
     <artifactId>assertj-jaxrs</artifactId>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>assertj-jaxrs</name>
     <description>Provides assertj assertions to jaxrs responses</description>
-    <url>https://github.com/attiand/assertj-jaxrs</url>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <resteasy.version>6.0.1.Final</resteasy.version>
+        <revision>1.0.0-SNAPSHOT</revision>
     </properties>
 
     <modules>
@@ -24,10 +23,18 @@
         <module>assertj-jaxrs-xml</module>
     </modules>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/swedish-council-for-higher-education/assertj-jaxrs</url>
+        </repository>
+    </distributionManagement>
+
     <scm>
-        <connection>scm:git:git@github.com:attiand/assertj-jaxrs.git</connection>
-        <url>https://github.com/attiand/assertj-jaxrs</url>
-        <developerConnection>scm:git:git@github.com:attiand/assertj-jaxrs.git</developerConnection>
+        <connection>scm:git:git@github.com:swedish-council-for-higher-education/assertj-jaxrs.git</connection>
+        <url>https://github.com/swedish-council-for-higher-education/assertj-jaxrs</url>
+        <developerConnection>scm:git:git@github.com:swedish-council-for-higher-education/assertj-jaxrs.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -35,10 +42,14 @@
         <developer>
             <name>Mattias Andersson</name>
             <email>andermaj@gmail.com</email>
-            <organization>github</organization>
-            <organizationUrl>https://github.com/attiand</organizationUrl>
+            <organization>UHR</organization>
         </developer>
     </developers>
+
+    <organization>
+        <name>UHR</name>
+        <url>https://uhr.se/</url>
+    </organization>
 
     <licenses>
         <license>
@@ -46,13 +57,6 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <dependencyManagement>
         <dependencies>
@@ -145,20 +149,6 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.5</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>

@@ -15,20 +15,20 @@ try (Response response = target.path("/resource").request().get()) {
 }
 ```
 For more examples se integration tests:
-* [Status code](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/StatusCodeIT.java)
-* [Headers](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/HeaderIT.java)
-* [Cookies](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/CookieIT.java)
-* [Entity](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/EntityIT.java)
-* [MediaType](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/MediaTypeIT.java)
-* [Date](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/DateIT.java)
-* [Link](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/LinkIT.java)
-* [Location](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/LocationIT.java)
-* [Language](assertj-jaxrs-core/src/test/java/com/github/attiand/assertj/jaxrs/LanguageIT.java)
+* [Status code](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/StatusCodeIT.java)
+* [Headers](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/HeaderIT.java)
+* [Cookies](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/CookieIT.java)
+* [Entity](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/EntityIT.java)
+* [MediaType](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/MediaTypeIT.java)
+* [Date](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/DateIT.java)
+* [Link](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/LinkIT.java)
+* [Location](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/LocationIT.java)
+* [Language](assertj-jaxrs-core/src/test/java/se/uhr/assertj/jaxrs/LanguageIT.java)
 
 Add the following dependency :
 ```xml
 <dependency>
-    <groupId>com.github.attiand</groupId>
+    <groupId>se.uhr.assertj</groupId>
     <artifactId>assertj-jaxrs-core</artifactId>
     <version>${version}</version>
     <scope>test</scope>
@@ -61,7 +61,7 @@ try (Response response = target.path("/resource").request().get()) {
 Add the following dependency:
 ```xml
 <dependency>
-    <groupId>com.github.attiand</groupId>
+    <groupId>se.uhr.assertj</groupId>
     <artifactId>assertj-jaxrs-json</artifactId>
     <version>${version}</version>
     <scope>test</scope>
@@ -92,7 +92,7 @@ try (Response response = target.path("/resource").request().get()) {
 Add the following dependency:
 ```xml
 <dependency>
-    <groupId>com.github.attiand</groupId>
+    <groupId>se.uhr.assertj</groupId>
     <artifactId>assertj-jaxrs-xml</artifactId>
     <version>${version}</version>
     <scope>test</scope>
@@ -117,7 +117,7 @@ class MyTest {
 Add the following dependency:
 ```xml
 <dependency>
-    <groupId>com.github.attiand</groupId>
+    <groupId>se.uhr.assertj</groupId>
     <artifactId>assertj-jaxrs-junit-jupiter</artifactId>
     <version>${version}</version>
     <scope>test</scope>
@@ -162,3 +162,5 @@ class GreetingResourceTest {
 `2.0.1` - Added maven wrapper, javadoc builds on java 17
 
 `3.0.0` - Use jaxrs 3.0 & jsonp 2.0 (jakarta name space)
+
+`4.0.0` - Moved to UHR, new maven coordinates `se.uhr.assertj`

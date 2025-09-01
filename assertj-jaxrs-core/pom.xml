@@ -4,9 +4,9 @@
     <artifactId>assertj-jaxrs-core</artifactId>
 
     <parent>
-        <groupId>com.github.attiand</groupId>
+        <groupId>se.uhr.assertj</groupId>
         <artifactId>assertj-jaxrs</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <dependencies>
